@@ -41,16 +41,23 @@ namespace Client.MirScenes.Dialogs
 
         public MirButton HeroMenuButton, HeroSummonButton;
 
+        /// <summary>战士职业26级之前没有蓝条</summary>
+        /// <value>
+        ///   <c>是否只显示血条</c>
+        /// </value>
         public bool HPOnly
         {
             get { return User != null && User.Class == MirClass.Warrior && User.Level < 26; }
         }
 
+        /// <summary>初始化游戏界面中间底部的主控件</summary>
         public MainDialog()
         {
-            Index = Settings.Resolution == 800 ? 0 : Settings.Resolution == 1024 ? 1 : 2;
+            // 似乎布局只支持800x600, 1280x800, 1366x768, 不支持1920x1080，使得使用1920时，控件两边空隙较大
+            Index = Settings.Resolution == 800 ? 0 : Settings.Resolution == 1024 ? 1 : 2; 
             Library = Libraries.Prguse;
-            Location = new Point(((Settings.ScreenWidth / 2) - (Size.Width / 2)), Settings.ScreenHeight - Size.Height);
+            // Size.Width, Height指控件的大小
+            Location = new Point(((Settings.ScreenWidth / 2) - (Size.Width / 2)), Settings.ScreenHeight - Size.Height); 
             PixelDetect = true;
 
             LeftCap = new MirImageControl
@@ -76,6 +83,7 @@ namespace Client.MirScenes.Dialogs
                 RightCap.Visible = true;
             }
 
+            // 背包按钮
             InventoryButton = new MirButton
             {
                 HoverIndex = 1904,
@@ -95,6 +103,7 @@ namespace Client.MirScenes.Dialogs
                     GameScene.Scene.InventoryDialog.Show();
             };
 
+            // 角色按钮
             CharacterButton = new MirButton
             {
                 HoverIndex = 1901,
@@ -117,6 +126,7 @@ namespace Client.MirScenes.Dialogs
                 }
             };
 
+            // 技能按钮
             SkillButton = new MirButton
             {
                 HoverIndex = 1907,
@@ -139,6 +149,7 @@ namespace Client.MirScenes.Dialogs
                 }
             };
 
+            // 任务按钮
             QuestButton = new MirButton
             {
                 HoverIndex = 1910,
@@ -157,6 +168,7 @@ namespace Client.MirScenes.Dialogs
                 else GameScene.Scene.QuestLogDialog.Hide();
             };
 
+            // 选项按钮
             OptionButton = new MirButton
             {
                 HoverIndex = 1913,
@@ -175,6 +187,7 @@ namespace Client.MirScenes.Dialogs
                 else GameScene.Scene.OptionDialog.Hide();
             };
 
+            // 菜单按钮
             MenuButton = new MirButton
             {
                 HoverIndex = 1961,
@@ -192,6 +205,7 @@ namespace Client.MirScenes.Dialogs
                 else GameScene.Scene.MenuDialog.Hide();
             };
 
+            // 商城按钮
             GameShopButton = new MirButton
             {
                 HoverIndex = 827,
@@ -209,6 +223,7 @@ namespace Client.MirScenes.Dialogs
                 else GameScene.Scene.GameShopDialog.Hide();
             };
 
+            // HP/MP控件
             HealthOrb = new MirControl
             {
                 Parent = this,
@@ -218,6 +233,7 @@ namespace Client.MirScenes.Dialogs
 
             HealthOrb.BeforeDraw += HealthOrb_BeforeDraw;
 
+            // HP文本
             HealthLabel = new MirLabel
             {
                 AutoSize = true,
@@ -226,6 +242,7 @@ namespace Client.MirScenes.Dialogs
             };
             HealthLabel.SizeChanged += Label_SizeChanged;
 
+            // MP文本
             ManaLabel = new MirLabel
             {
                 AutoSize = true,
@@ -234,6 +251,7 @@ namespace Client.MirScenes.Dialogs
             };
             ManaLabel.SizeChanged += Label_SizeChanged;
 
+            // HP, MP使用风格2时的文本
             TopLabel = new MirLabel
             {
                 Size = new Size(85, 30),
@@ -250,6 +268,7 @@ namespace Client.MirScenes.Dialogs
                 Parent = HealthOrb,
             };
 
+            // 等级文本
             LevelLabel = new MirLabel
             {
                 AutoSize = true,
@@ -257,6 +276,7 @@ namespace Client.MirScenes.Dialogs
                 Location = new Point(5, 108)
             };
 
+            // 角色名称文本
             CharacterName = new MirLabel
             {
                 DrawFormat = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter,
@@ -266,6 +286,7 @@ namespace Client.MirScenes.Dialogs
             };
 
 
+            // 经验条控件
             ExperienceBar = new MirImageControl
             {
                 Index = Settings.Resolution != 800 ? 8 : 7,
@@ -277,6 +298,7 @@ namespace Client.MirScenes.Dialogs
             };
             ExperienceBar.BeforeDraw += ExperienceBar_BeforeDraw;
 
+            // 经验进度文本
             ExperienceLabel = new MirLabel
             {
                 AutoSize = true,
@@ -284,6 +306,7 @@ namespace Client.MirScenes.Dialogs
                 NotControl = true,
             };
 
+            // 金币文本, 点击金币文本可以丢弃金币
             GoldLabel = new MirLabel
             {
                 DrawFormat = TextFormatFlags.VerticalCenter,
@@ -310,6 +333,7 @@ namespace Client.MirScenes.Dialogs
             };
             WeightBar.BeforeDraw += WeightBar_BeforeDraw;
 
+            // 负重剩余文本
             WeightLabel = new MirLabel
             {
                 Parent = this,
@@ -317,6 +341,7 @@ namespace Client.MirScenes.Dialogs
                 Size = new Size(40, 14),
             };
 
+            // 背包格子剩余文本
             SpaceLabel = new MirLabel
             {
                 Parent = this,
@@ -472,8 +497,8 @@ namespace Client.MirScenes.Dialogs
             ExperienceLabel.Location = new Point((ExperienceBar.Size.Width / 2) - 20, -10);
             GoldLabel.Text = GameScene.Gold.ToString("###,###,##0");
             CharacterName.Text = User.Name;
-            SpaceLabel.Text = User.Inventory.Count(t => t == null).ToString();
-            WeightLabel.Text = (MapObject.User.Stats[Stat.BagWeight] - MapObject.User.CurrentBagWeight).ToString();
+            SpaceLabel.Text = User.Inventory.Count(t => t == null).ToString(); // 背包剩余空格
+            WeightLabel.Text = (MapObject.User.Stats[Stat.BagWeight] - MapObject.User.CurrentBagWeight).ToString(); // 剩余负重
         }
 
         private void Label_SizeChanged(object sender, EventArgs e)
@@ -578,9 +603,10 @@ namespace Client.MirScenes.Dialogs
         {
             Index = Settings.Resolution != 800 ? 2221 : 2201;
             Library = Libraries.Prguse;
-            Location = new Point(GameScene.Scene.MainDialog.Location.X + 230, Settings.ScreenHeight - 97);
+            Location = new Point(GameScene.Scene.MainDialog.Location.X + 230, Settings.ScreenHeight - 97); // 相对于MainDialog来设定位置
             PixelDetect = true;
 
+            // 点击聊天框中的发言人可以快速私聊
             KeyPress += ChatPanel_KeyPress;
             KeyDown += ChatPanel_KeyDown;
             MouseWheel += ChatPanel_MouseWheel;
@@ -592,7 +618,7 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 Size = new Size(Settings.Resolution != 800 ? 627 : 403, 13),
                 Location = new Point(1, 54),
-                MaxLength = Globals.MaxChatLength,
+                MaxLength = Globals.MaxChatLength, // 聊天最大输入长度
                 Visible = false,
                 Font = ChatFont,
             };
@@ -707,6 +733,13 @@ namespace Client.MirScenes.Dialogs
             ChatTextBox.TextBox.SelectionStart = ChatTextBox.Text.Length;
         }
 
+        /// <summary>
+        ///   <para>
+        /// 聊天框的输入事件</para>
+        ///   <para>TODO: 加入上下键快速获取历史聊天的功能</para>
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="KeyPressEventArgs" /> instance containing the event data.</param>
         private void ChatTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             switch (e.KeyChar)

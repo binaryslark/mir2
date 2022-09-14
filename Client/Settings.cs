@@ -9,7 +9,7 @@ namespace Client
     {
         public const long CleanDelay = 600000;
 
-        public static int ScreenWidth = 1024, ScreenHeight = 768;
+        public static int ScreenWidth = 1024, ScreenHeight = 768; // 窗口大小
         private static InIReader Reader = new InIReader(@".\Mir2Config.ini");
         private static InIReader QuestTrackingReader = new InIReader(Path.Combine(UserDataPath, @".\QuestTracking.ini"));
 
@@ -73,7 +73,7 @@ namespace Client
         public static bool FullScreen = true, Borderless = true, TopMost = true, MouseClip = false;
         public static string FontName = "Tahoma"; //"MS Sans Serif"
         public static float FontSize = 8F;
-        public static bool UseMouseCursors = true;
+        public static bool UseMouseCursors = false; // 鼠标贴图开启后，Hover背包栏物品是会遮挡文字
 
         public static bool FPSCap = true;
         public static int MaxFPS = 100;
@@ -81,10 +81,10 @@ namespace Client
         public static bool DebugMode = false;
 
         //Network
-        public static bool UseConfig = false;
-        public static string IPAddress = "127.0.0.1";
-        public static int Port = 7000;
-        public const int TimeOut = 5000;
+        public static bool UseConfig   = false;
+        public static string IPAddress = "127.0.0.1"; // 默认IP地址，如果需要修改，则在Mir2Config.ini的[NetWorld]节区中指定连接到的服务端IP
+        public static int Port         = 7000;
+        public const int TimeOut       = 5000;
 
         //Sound
         public static int SoundOverLap = 3;

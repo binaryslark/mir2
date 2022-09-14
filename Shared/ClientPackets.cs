@@ -195,6 +195,7 @@ namespace ClientPackets
         {
         }
     }
+    /// <summary>转向</summary>
     public sealed class Turn : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.Turn; } }
@@ -210,6 +211,7 @@ namespace ClientPackets
             writer.Write((byte)Direction);
         }
     }
+    /// <summary>走</summary>
     public sealed class Walk : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.Walk; } }
@@ -224,6 +226,7 @@ namespace ClientPackets
             writer.Write((byte)Direction);
         }
     }
+    /// <summary>跑</summary>
     public sealed class Run : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.Run; } }
@@ -265,6 +268,7 @@ namespace ClientPackets
                 LinkedItems[i].Save(writer);
         }
     }
+    /// <summary>把物品从一个格子放入到另一个格子（限同一个格子栏）</summary>
     public sealed class MoveItem : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.MoveItem; } }

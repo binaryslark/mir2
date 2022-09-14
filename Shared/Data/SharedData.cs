@@ -43,11 +43,11 @@ public class Door
     public Point Location;
 }
 
-public class RankCharacterInfo
+public class RankCharacterInfo // 排行榜上的角色信息
 {
     public long PlayerId;
     public string Name;
-    public MirClass Class;
+    public MirClass Class; // 角色职业
     public int level;
 
     public long Experience;//clients shouldnt care about this only server

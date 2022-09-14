@@ -18,9 +18,9 @@ namespace Server.Database
     {
         public Envir Envir => SMain.EditEnvir;
 
-        private readonly Array StatEnums = Enum.GetValues(typeof(Stat));
-        private readonly Array BindEnums = Enum.GetValues(typeof(BindMode));
-        private readonly Array SpecialEnums = Enum.GetValues(typeof(SpecialItemMode));
+        private readonly Array StatEnums = Enum.GetValues(typeof(Stat)); // 物品的所有属性列(攻击力、防御力、攻速、准确、敏捷...)
+        private readonly Array BindEnums = Enum.GetValues(typeof(BindMode)); // 物品的所有限定规则(不可丢弃、丢弃销毁...)
+        private readonly Array SpecialEnums = Enum.GetValues(typeof(SpecialItemMode)); // 物品的所有特殊能力(麻痹、护身...)
 
         private DataTable Table;
 
@@ -49,6 +49,7 @@ namespace Server.Database
             aProp.SetValue(c, true, null);
         }
 
+        /// <summary>设置按物品类型的过滤标签</summary>
         private void InitializeItemInfoFilters()
         {
             var types = Enum.GetValues(typeof(ItemType));

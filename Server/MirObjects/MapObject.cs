@@ -246,6 +246,10 @@ namespace Server.MirObjects
 
         public abstract void SetOperateTime();
 
+        /// <summary>计算攻击力（幸运值越高，发挥出最大攻击力的概率越高）</summary>
+        /// <param name="min">攻击力下限</param>
+        /// <param name="max">攻击力上限</param>
+        /// <returns>本次发挥的攻击力</returns>
         public int GetAttackPower(int min, int max)
         {
             if (min < 0) min = 0;
@@ -265,6 +269,11 @@ namespace Server.MirObjects
             return Envir.Random.Next(min, max + 1);
         }
 
+        /// <summary>计算范围攻击的攻击力（范围越大，攻击力下限越低; 幸运值越高，发挥出最大攻击力的概率越高）</summary>
+        /// <param name="min">攻击力下限</param>
+        /// <param name="max">攻击力上限</param>
+        /// <param name="range">范围</param>
+        /// <returns>本次发挥的攻击力</returns>
         public int GetRangeAttackPower(int min, int max, int range)
         {
             //maxRange = highest possible damage
@@ -277,6 +286,10 @@ namespace Server.MirObjects
             return GetAttackPower(min, max);
         }
 
+        /// <summary>计算防御力</summary>
+        /// <param name="min">防御力下限</param>
+        /// <param name="max">防御力上限</param>
+        /// <returns>防御力</returns>
         public int GetDefencePower(int min, int max)
         {
             if (min < 0) min = 0;

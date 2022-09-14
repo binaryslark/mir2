@@ -4,45 +4,46 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
+// 物品信息
 public class ItemInfo
 {
     public int Index;
-    public string Name = string.Empty;
-    public ItemType Type;
-    public ItemGrade Grade;
-    public RequiredType RequiredType = RequiredType.Level;
-    public RequiredClass RequiredClass = RequiredClass.None;
-    public RequiredGender RequiredGender = RequiredGender.None;
-    public ItemSet Set;
+    public string Name = string.Empty; // 物品名称 TODO: 汉化
+    public ItemType Type; // 物品种类
+    public ItemGrade Grade; // 物品品质（普通、稀有...）
+    public RequiredType RequiredType = RequiredType.Level; // 穿戴要求的类型
+    public RequiredClass RequiredClass = RequiredClass.None; // 穿戴职业要求
+    public RequiredGender RequiredGender = RequiredGender.None; // 穿戴性别要求
+    public ItemSet Set; // 新特性？可能需要阉割掉
 
-    public short Shape;
-    public byte Weight, Light, RequiredAmount;
+    public short Shape; // 形状？
+    public byte Weight, Light, RequiredAmount; // 物品重量，亮度？需要的数量？
 
-    public ushort Image, Durability;
+    public ushort Image, Durability; // 图片？持久
 
-    public uint Price; 
-    public ushort StackSize = 1;
+    public uint Price;  // 商店中出售的价格？
+    public ushort StackSize = 1; // 可叠放的数量（护身符，红毒绿毒）
 
     public bool StartItem;
     public byte Effect;
 
-    public bool NeedIdentify, ShowGroupPickup, GlobalDropNotify;
-    public bool ClassBased;
-    public bool LevelBased;
-    public bool CanMine;
-    public bool CanFastRun;
-    public bool CanAwakening;
+    public bool NeedIdentify, ShowGroupPickup, GlobalDropNotify; // 是否需要鉴定（神秘戒指、神秘手镯）, 是否拾取时通知给组队？丢弃时通知？
+    public bool ClassBased; // ?
+    public bool LevelBased; // ?
+    public bool CanMine; // 是否可以用来挖矿？（鹤嘴锄）
+    public bool CanFastRun; // ?
+    public bool CanAwakening; // ?
 
     public BindMode Bind = BindMode.None;
 
-    public SpecialItemMode Unique = SpecialItemMode.None;
-    public byte RandomStatsId;
-    public RandomItemStat RandomStats;
+    public SpecialItemMode Unique = SpecialItemMode.None; // 物品特性（麻痹、护身...）
+    public byte RandomStatsId; 
+    public RandomItemStat RandomStats; // 指被随机的属性（极品）
     public string ToolTip = string.Empty;
 
-    public byte Slots;
+    public byte Slots; // 宝石槽？需要阉割掉
 
-    public Stats Stats;
+    public Stats Stats; // 属性集
 
     public bool IsConsumable
     {
@@ -1203,24 +1204,30 @@ public class RandomItemStat
         }
     }
 
+    /// <summary>设置武器的随机属性</summary>
     public void SetWeapon()
     {
+        // 持久
         MaxDuraChance = 2;
         MaxDuraStatChance = 13;
         MaxDuraMaxStat = 13;
 
+        // 最大攻击
         MaxDcChance = 15;
         MaxDcStatChance = 15;
         MaxDcMaxStat = 13;
 
+        // 最大法力
         MaxMcChance = 20;
         MaxMcStatChance = 15;
         MaxMcMaxStat = 13;
 
+        // 最大道术
         MaxScChance = 20;
         MaxScStatChance = 15;
         MaxScMaxStat = 13;
 
+        // 攻速
         AttackSpeedChance = 60;
         AttackSpeedStatChance = 30;
         AttackSpeedMaxStat = 3;
@@ -1229,6 +1236,7 @@ public class RandomItemStat
         StrongStatChance = 20;
         StrongMaxStat = 2;
 
+        // 准确
         AccuracyChance = 30;
         AccuracyStatChance = 20;
         AccuracyMaxStat = 2;

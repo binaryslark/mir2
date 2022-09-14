@@ -75,14 +75,15 @@ public enum GMOptions : byte
     Superman = 0x0004
 }
 
+/// <summary>觉醒类型？</summary>
 public enum AwakeType : byte
 {
     None = 0,
-    DC,
-    MC,
-    SC,
-    AC,
-    MAC,
+    DC,  // 攻击
+    MC,  // 魔力
+    SC,  // 道术
+    AC,  // 防御
+    MAC, // 魔防
     HPMP,
 }
 
@@ -102,32 +103,35 @@ public enum OutputMessageType : byte
     Guild
 }
 
+/// <summary>物品级别</summary>
 public enum ItemGrade : byte
 {
     None = 0,
-    Common = 1,
-    Rare = 2,
-    Legendary = 3,
-    Mythical = 4,
-    Heroic = 5,
+    Common = 1,    // 普通
+    Rare = 2,      // 稀有
+    Legendary = 3, // 传说
+    Mythical = 4,  // 神话
+    Heroic = 5,    // 史诗
 }
 
 
 
+/// <summary>锻造类型</summary>
 public enum RefinedValue : byte
 {
     None = 0,
-    DC = 1,
-    MC = 2,
-    SC = 3,
+    DC = 1, // 物攻
+    MC = 2, // 魔力
+    SC = 3, // 道术
 }
 
+/// <summary>任务类型</summary>
 public enum QuestType : byte
 {
     General = 0,
-    Daily = 1,
-    Repeatable = 2,
-    Story = 3
+    Daily = 1,      // 日常
+    Repeatable = 2, // 可重复
+    Story = 3       // 故事（主线，只可做一次？）
 }
 
 public enum QuestIcon : byte
@@ -227,7 +231,7 @@ public enum Monster : ushort
     WoomaWarrior = 31,
     FlamingWooma = 32,
     WoomaGuardian = 33,
-    WoomaTaurus = 34, //BOSS
+    WoomaTaurus = 34, // BOSS, 沃玛教主
     WhimperingBee = 35,
     GiantWorm = 36,
     Centipede = 37,
@@ -716,9 +720,9 @@ public enum Monster : ushort
 
 public enum MirAction : byte
 {
-    Standing,
-    Walking,
-    Running,
+    Standing, // 站立
+    Walking,  // 走
+    Running,  // 跑
     Pushed,
     DashL,
     DashR,
@@ -734,19 +738,19 @@ public enum MirAction : byte
     AttackRange2,
     AttackRange3,
     Special,
-    Struck,
-    Harvest,
-    Spell,
+    Struck,   // 受击打
+    Harvest,  // 采集
+    Spell,    // 使用技能
     Die,
     Dead,
     Skeleton,
     Show,
-    Hide,
-    Stoned,
+    Hide,     // 隐身
+    Stoned,   // 石化
     Appear,
     Revive,
     SitDown,
-    Mine,
+    Mine,     // 挖矿
     Sneek,
     DashAttack,
     Lunge,
@@ -766,37 +770,42 @@ public enum MirAction : byte
     FishingReel
 }
 
+/// <summary>地图的格子类型</summary>
 public enum CellAttribute : byte
 {
-    Walk = 0,
-    HighWall = 1,
-    LowWall = 2,
+    Walk = 0,     // 可走入
+    HighWall = 1, // 高墙（灵魂火符无法穿过这种）
+    LowWall = 2,  // 低墙（灵魂火符可穿过这种）
 }
 
+/// <summary>光亮类型</summary>
 public enum LightSetting : byte
 {
     Normal = 0,
     Dawn = 1,
-    Day = 2,
+    Day = 2, // 白天
     Evening = 3,
     Night = 4
 }
 
+/// <summary>性别</summary>
 public enum MirGender : byte
 {
     Male = 0,
     Female = 1
 }
 
+/// <summary>职业</summary>
 public enum MirClass : byte
 {
-    Warrior = 0,
-    Wizard = 1,
-    Taoist = 2,
-    Assassin = 3,
-    Archer = 4
+    Warrior = 0,  // 战士
+    Wizard = 1,   // 法师
+    Taoist = 2,   // 道士
+    Assassin = 3, // 刺客
+    Archer = 4    // 弓手
 }
 
+/// <summary>行走方向</summary>
 public enum MirDirection : byte
 {
     Up = 0,
@@ -811,17 +820,18 @@ public enum MirDirection : byte
 
 public enum ObjectType : byte
 {
-    None = 0,
-    Player = 1,
-    Item = 2,
-    Merchant = 3,
-    Spell = 4,
-    Monster = 5,
-    Deco = 6,
-    Creature = 7,
-    Hero = 8
+    None     = 0,
+    Player   = 1, // 玩家
+    Item     = 2, // 物品
+    Merchant = 3, // 商人NPC？
+    Spell    = 4, // 技能
+    Monster  = 5, // 怪物
+    Deco     = 6, // 首饰？
+    Creature = 7, // 生物？（鸡、鹿等？）
+    Hero     = 8  // 玩家的第二个英雄？
 }
 
+/// <summary>聊天信息类型</summary>
 public enum ChatType : byte
 {
     Normal = 0,
@@ -832,55 +842,60 @@ public enum ChatType : byte
     Group = 5,
     WhisperIn = 6,
     WhisperOut = 7,
-    Guild = 8,
+    Guild = 8, // 行会
     Trainer = 9,
-    LevelUp = 10,
+    LevelUp = 10, // 升级
     System2 = 11,
     Relationship = 12,
-    Mentor = 13,
+    Mentor = 13,// 师徒
     Shout2 = 14,
     Shout3 = 15,
-    LineMessage = 16,
+    LineMessage = 16, // 聊天栏中每隔一定时间出现的LineMessage
 }
 
+/// <summary>物品类型</summary>
 public enum ItemType : byte
 {
     Nothing = 0,
-    Weapon = 1,
-    Armour = 2,
-    Helmet = 4,
-    Necklace = 5,
-    Bracelet = 6,
-    Ring = 7,
-    Amulet = 8,
-    Belt = 9,
-    Boots = 10,
-    Stone = 11,
-    Torch = 12,
-    Potion = 13,
-    Ore = 14,
-    Meat = 15,
-    CraftingMaterial = 16,
-    Scroll = 17,
-    Gem = 18,
-    Mount = 19,
-    Book = 20,
-    Script = 21,
-    Reins = 22,
-    Bells = 23,
-    Saddle = 24,
-    Ribbon = 25,
-    Mask = 26,
+    Weapon = 1,            // 武器
+    Armour = 2,            // 盔甲
+    Helmet = 4,            // 头盔
+    Necklace = 5,          // 项链
+    Bracelet = 6,          // 手镯
+    Ring = 7,              // 戒指
+    Amulet = 8,            // 护身符
+    Belt = 9,              // 腰带
+    Boots = 10,            // 鞋子
+    Stone = 11,            // 石头（随机传送石之类？）
+    Torch = 12,            // 火把
+    Potion = 13,           // 药粉
+    Ore = 14,              // 矿石
+    Meat = 15,             // 肉（鸡肉、鹿肉？）
+    CraftingMaterial = 16, // 制作材料
+    Scroll = 17,           // 卷轴
+    Gem = 18,              // 宝石（矿石？）
+    Mount = 19,            // 坐骑
+    Book = 20,             // 技能书
+    Script = 21,           // 
+
+    // 坐骑相关
+    Reins = 22,            // 缰绳
+    Bells = 23,            // 铃
+    Saddle = 24,           // 马鞍
+    Ribbon = 25,           // 丝带
+    Mask = 26,             // 面具
+
+    // 钓鱼相关
     Food = 27,
     Hook = 28,
     Float = 29,
-    Bait = 30,
+    Bait = 30,             // 诱饵
     Finder = 31,
     Reel = 32,
     Fish = 33,
     Quest = 34,
     Awakening = 35,
-    Pets = 36,
+    Pets = 36,             // 宝宝（法师、道士的？）
     Transform = 37,
     Deco = 38,
     Socket = 39,
@@ -889,6 +904,10 @@ public enum ItemType : byte
     SealedHero = 42
 }
 
+/// <summary>
+///   <para>格子栏的类型</para>
+///   <para>例如：背包栏格子、仓库格子、交易框格子等</para>
+/// </summary>
 public enum MirGridType : byte
 {
     None = 0,
@@ -918,31 +937,33 @@ public enum MirGridType : byte
     HeroMPItem = 24
 }
 
+/// <summary>装备槽位类型</summary>
 public enum EquipmentSlot : byte
 {
-    Weapon = 0,
-    Armour = 1,
-    Helmet = 2,
-    Torch = 3,
-    Necklace = 4,
-    BraceletL = 5,
-    BraceletR = 6,
-    RingL = 7,
-    RingR = 8,
-    Amulet = 9,
-    Belt = 10,
-    Boots = 11,
-    Stone = 12,
-    Mount = 13
+    Weapon    = 0,      // 武器
+    Armour    = 1,      // 盔甲
+    Helmet    = 2,      // 头盔
+    Torch     = 3,      // 火把
+    Necklace  = 4,      // 项链
+    BraceletL = 5,      // 手镯（左）
+    BraceletR = 6,      // 手镯（右）
+    RingL     = 7,      // 戒指（左）
+    RingR     = 8,      // 戒指（右）
+    Amulet    = 9,      // 护身符
+    Belt      = 10,     // 腰带
+    Boots     = 11,     // 鞋子
+    Stone     = 12,     // 石头（随机传送石之类）
+    Mount     = 13      // 坐骑
 }
 
+/// <summary>坐骑的装备槽位类型</summary>
 public enum MountSlot : byte
 {
-    Reins = 0,
-    Bells = 1,
-    Saddle = 2,
-    Ribbon = 3,
-    Mask = 4
+    Reins  = 0,   // 缰绳
+    Bells  = 1,   // 铃铛
+    Saddle = 2,   // 马鞍
+    Ribbon = 3,   // 丝带
+    Mask   = 4    // 面具
 }
 
 public enum FishingSlot : byte
@@ -954,34 +975,37 @@ public enum FishingSlot : byte
     Reel = 4
 }
 
+/// <summary>攻击模式</summary>
 public enum AttackMode : byte
 {
-    Peace = 0,
-    Group = 1,
-    Guild = 2,
-    EnemyGuild = 3,
-    RedBrown = 4,
-    All = 5
+    Peace      = 0, // 和平攻击
+    Group      = 1, // 组队攻击
+    Guild      = 2, // 行会攻击
+    EnemyGuild = 3, // 敌对行会攻击？
+    RedBrown   = 4, // 善恶攻击
+    All        = 5  // 全体攻击
 }
 
+/// <summary>宝宝行为模式</summary>
 public enum PetMode : byte
 {
-    Both = 0,
-    MoveOnly = 1,
-    AttackOnly = 2,
-    None = 3,
+    Both       = 0, // 攻击且移动
+    MoveOnly   = 1, // 只移动
+    AttackOnly = 2, // 只攻击
+    None       = 3, // 不移动且不攻击
 }
 
+/// <summary>施毒类型</summary>
 [Flags]
 public enum PoisonType : ushort
 {
-    None = 0,
-    Green = 1,
-    Red = 2,
-    Slow = 4,
-    Frozen = 8,
-    Stun = 16,
-    Paralysis = 32,
+    None             = 0,
+    Green            = 1, // 绿毒
+    Red              = 2, // 红毒
+    Slow             = 4,
+    Frozen           = 8,
+    Stun             = 16,
+    Paralysis        = 32,
     DelayedExplosion = 64,
     Bleeding = 128,
     LRParalysis = 256,
@@ -993,43 +1017,44 @@ public enum PoisonType : ushort
 
 public enum BindMode : short
 {
-    None = 0,
-    DontDeathdrop = 1,//0x0001
-    DontDrop = 2,//0x0002
-    DontSell = 4,//0x0004
-    DontStore = 8,//0x0008
-    DontTrade = 16,//0x0010
-    DontRepair = 32,//0x0020
-    DontUpgrade = 64,//0x0040
-    DestroyOnDrop = 128,//0x0080
-    BreakOnDeath = 256,//0x0100
-    BindOnEquip = 512,//0x0200
-    NoSRepair = 1024,//0x0400
-    NoWeddingRing = 2048,//0x0800
-    UnableToRent = 4096,
-    UnableToDisassemble = 8192,
-    NoMail = 16384,
-    NoHero = -32768
+    None                = 0,
+    DontDeathdrop       = 1,     //0x0001, 不会死亡掉落
+    DontDrop            = 2,     //0x0002, 不可丢弃
+    DontSell            = 4,     //0x0004, 不可出售
+    DontStore           = 8,     //0x0008, 不可存储
+    DontTrade           = 16,    //0x0010, 不可交易
+    DontRepair          = 32,    //0x0020, 不可修理
+    DontUpgrade         = 64,    //0x0040, 不可升级
+    DestroyOnDrop       = 128,   //0x0080, 丢弃时销毁
+    BreakOnDeath        = 256,   //0x0100
+    BindOnEquip         = 512,   //0x0200, 佩戴后无法摘下？
+    NoSRepair           = 1024,  //0x0400, 不可特殊修理
+    NoWeddingRing       = 2048,  //0x0800, 不是结婚戒指
+    UnableToRent        = 4096,  // 不能租用
+    UnableToDisassemble = 8192,  // 不能分解
+    NoMail              = 16384, // 不可邮寄？
+    NoHero              = -32768 // 
 }
 
 [Flags]
 public enum SpecialItemMode : short
 {
-    None = 0,
-    Paralize = 0x0001,
-    Teleport = 0x0002,
-    ClearRing = 0x0004,
-    Protection = 0x0008,
-    Revival = 0x0010,
-    Muscle = 0x0020,
-    Flame = 0x0040,
-    Healing = 0x0080,
-    Probe = 0x0100,
-    Skill = 0x0200,
-    NoDuraLoss = 0x0400,
-    Blink = 0x800,
+    None       = 0,
+    Paralize   = 0x0001, // 麻痹
+    Teleport   = 0x0002, // 传送, 输入@move x,y 可传送
+    ClearRing  = 0x0004, // 隐身
+    Protection = 0x0008, // 护身, 被攻击先掉魔法值
+    Revival    = 0x0010, // 复活
+    Muscle     = 0x0020, // 负重
+    Flame      = 0x0040, // 火焰，使用者佩戴后拥有使用小火球魔法的能力，火球术等级1.战士穿戴时，烈火伤害提高20%; 法师穿戴时，火系魔法伤害提高10%; 道士穿戴时，召唤神兽伤害提高15%
+    Healing    = 0x0080, // 治疗
+    Probe      = 0x0100, // 探测，可探测玩家位置
+    Skill      = 0x0200, // 技巧
+    NoDuraLoss = 0x0400, // 无持久损耗
+    Blink      = 0x800,  // 闪烁
 }
 
+// 穿戴装备的职业要求
 [Flags]
 public enum RequiredClass : byte
 {
@@ -1042,6 +1067,7 @@ public enum RequiredClass : byte
     None = WarWizTao | Assassin | Archer
 }
 
+// 穿戴装备的性别要求
 [Flags]
 public enum RequiredGender : byte
 {
@@ -1050,20 +1076,21 @@ public enum RequiredGender : byte
     None = Male | Female
 }
 
+// 物品穿戴要求的类型
 public enum RequiredType : byte
 {
-    Level = 0,
-    MaxAC = 1,
-    MaxMAC = 2,
-    MaxDC = 3,
-    MaxMC = 4,
-    MaxSC = 5,
-    MaxLevel = 6,
-    MinAC = 7,
-    MinMAC = 8,
-    MinDC = 9,
-    MinMC = 10,
-    MinSC = 11,
+    Level    = 0, // 最小等级
+    MaxAC    = 1, // 最大防御力
+    MaxMAC   = 2, // 最大魔法防御力
+    MaxDC    = 3, // 最大攻击力
+    MaxMC    = 4, // 最大法力
+    MaxSC    = 5, // 最大道术
+    MaxLevel = 6, // 最高等级
+    MinAC    = 7, // 最小防御力
+    MinMAC   = 8, // 最小魔法防御力
+    MinDC    = 9, // 最小攻击力
+    MinMC    = 10, // 最小法力
+    MinSC    = 11, // 最小道术
 }
 
 public enum ItemSet : byte
@@ -1109,14 +1136,14 @@ public enum Spell : byte
     None = 0,
 
     //Warrior
-    Fencing = 1,
-    Slaying = 2,
-    Thrusting = 3,
-    HalfMoon = 4,
-    ShoulderDash = 5,
+    Fencing = 1,                                    // 基础剑术
+    Slaying = 2,                                    // 攻杀剑术
+    Thrusting = 3,                                  // 刺杀剑术
+    HalfMoon = 4,                                   // 半月弯刀
+    ShoulderDash = 5,                               // 野蛮冲撞
     TwinDrakeBlade = 6,
     Entrapment = 7,
-    FlamingSword = 8,
+    FlamingSword = 8,                               // 烈火剑法
     LionRoar = 9,
     CrossHalfMoon = 10,
     BladeAvalanche = 11,
@@ -1128,22 +1155,22 @@ public enum Spell : byte
     ImmortalSkin = 17,
 
     //Wizard
-    FireBall = 31,
-    Repulsion = 32,
-    ElectricShock = 33,
-    GreatFireBall = 34,
-    HellFire = 35,
-    ThunderBolt = 36,
-    Teleport = 37,
-    FireBang = 38,
-    FireWall = 39,
-    Lightning = 40,
-    FrostCrunch = 41,
-    ThunderStorm = 42,
-    MagicShield = 43,
+    FireBall = 31,                                  // 火球术
+    Repulsion = 32,                                 // 抗拒火环
+    ElectricShock = 33,                             // 诱惑之光
+    GreatFireBall = 34,                             // 大火球
+    HellFire = 35,                                  // 地狱火
+    ThunderBolt = 36,                               // 雷电术
+    Teleport = 37,                                  // 瞬息移动
+    FireBang = 38,                                  // 爆裂火焰
+    FireWall = 39,                                  // 火墙
+    Lightning = 40,                                 // 疾光电影
+    FrostCrunch = 41,                               // 
+    ThunderStorm = 42,                              // 地狱雷光？
+    MagicShield = 43,                               // 魔法盾
     TurnUndead = 44,
     Vampirism = 45,
-    IceStorm = 46,
+    IceStorm = 46,                                  // 冰咆哮
     FlameDisruptor = 47,
     Mirroring = 48,
     FlameField = 49,
@@ -1155,18 +1182,18 @@ public enum Spell : byte
     StormEscape = 55,
 
     //Taoist
-    Healing = 61,
-    SpiritSword = 62,
-    Poisoning = 63,
-    SoulFireBall = 64,
-    SummonSkeleton = 65,
-    Hiding = 67,
-    MassHiding = 68,
-    SoulShield = 69,
-    Revelation = 70,
-    BlessedArmour = 71,
-    EnergyRepulsor = 72,
-    TrapHexagon = 73,
+    Healing = 61,                                   // 治愈术
+    SpiritSword = 62,                               // 精神力战法
+    Poisoning = 63,                                 // 施毒术
+    SoulFireBall = 64,                              // 灵魂火符
+    SummonSkeleton = 65,                            // 召唤骷髅
+    Hiding = 67,                                    // 隐身术
+    MassHiding = 68,                                // 群体隐身术
+    SoulShield = 69,                                // 幽灵盾
+    Revelation = 70,                                // 心灵启示
+    BlessedArmour = 71,                             // 神圣战甲术
+    EnergyRepulsor = 72,                            // 群体治愈术
+    TrapHexagon = 73,                               // 困魔咒
     Purification = 74,
     MassHealing = 75,
     Hallucination = 76,

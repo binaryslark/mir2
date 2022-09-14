@@ -108,6 +108,7 @@ namespace Client.MirScenes.Dialogs
             };
             CloseButton.Click += (o, e) => Hide();
 
+            // 背包中金币Label, 点击金币可以丢弃
             GoldLabel = new MirLabel
             {
                 Parent = this,
@@ -161,6 +162,7 @@ namespace Client.MirScenes.Dialogs
                 }
             }
 
+            // 背包负重Label
             WeightLabel = new MirLabel
             {
                 Parent = this,

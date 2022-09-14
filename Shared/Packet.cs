@@ -32,7 +32,7 @@ public abstract class Packet
                 p = IsServer ? GetClientPacket(id) : GetServerPacket(id);
                 if (p == null) return null;
 
-                p.ReadPacket(reader);
+                p.ReadPacket(reader); // 初始化各种不同类型的Packet(多态，继承自Packet)
             }
             catch
             {
@@ -41,6 +41,7 @@ public abstract class Packet
             }
         }
 
+        // extra是解析完当前Packet后，rawBytes剩余的未解析的内容
         extra = new byte[rawBytes.Length - length];
         Buffer.BlockCopy(rawBytes, length, extra, 0, rawBytes.Length - length);
 

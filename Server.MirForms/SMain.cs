@@ -145,6 +145,9 @@ namespace Server
             }
         }
 
+        /// <summary>Start Server按钮事件，启动服务端</summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void startServerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Envir.Start();

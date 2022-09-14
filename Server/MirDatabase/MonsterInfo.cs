@@ -26,22 +26,28 @@ namespace Server.MirDatabase
         }
 
         public int Index;
-        public string Name = string.Empty;
+        public string Name = string.Empty; // 怪物名字
 
-        public Monster Image;
-        public byte AI, Effect, ViewRange = 7, CoolEye;
-        public ushort Level;
+        public Monster Image; // 怪物种类（图片ID？）
+        public byte AI; // 怪物AI
+        public byte Effect;
+        public byte ViewRange = 7; // 怪物视野
+        public byte CoolEye;
+        public ushort Level; // 怪物等级
 
         public byte Light;
 
         public ushort AttackSpeed = 2500, MoveSpeed = 1800;
-        public uint Experience;
+        public uint Experience; // 击杀怪物的经验值
 
         public string DropPath = "";
         
-        public List<DropInfo> Drops = new List<DropInfo>();
+        public List<DropInfo> Drops = new List<DropInfo>(); // 怪物掉落物品信息数组，表示了可能掉落的物品和概率
 
-        public bool CanTame = true, CanPush = true, AutoRev = true, Undead = false;
+        public bool CanTame = true; // 怪物是否可以被诱惑
+        public bool CanPush = true; // 怪物是否可以推开（抗拒火环、野蛮冲撞？）
+        public bool AutoRev = true; // ?
+        public bool Undead = false; // 怪物是否是不死系（僵尸？）
 
         public bool HasSpawnScript;
         public bool HasDieScript;
@@ -249,12 +255,14 @@ namespace Server.MirDatabase
         public uint Gold;
     }
 
+    /// <summary>组队掉落的物品信息数组</summary>
     public class GroupDropInfo : List<DropInfo>
     {
         public bool Random;
         public bool First;
     }
 
+    /// <summary>掉落物品信息</summary>
     public class DropInfo
     {
         protected static Envir Envir
@@ -267,13 +275,13 @@ namespace Server.MirDatabase
             get { return MessageQueue.Instance; }
         }
 
-        public int Chance;
-        public ItemInfo Item;
+        public int Chance; // 掉落概率
+        public ItemInfo Item; // 物品
         public uint Gold;
         public GroupDropInfo GroupedDrop;
 
         public byte Type;
-        public bool QuestRequired;
+        public bool QuestRequired; // 是否是任务需要的物品
 
         public static DropInfo FromLine(string s)
         {
