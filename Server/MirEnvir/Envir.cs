@@ -36,10 +36,13 @@ namespace Server.MirEnvir
         public static Random GetThreadRandom() =>
             RandomWrapper.Value;
 
+        // 生成一个非负整数
         public int Next() =>
             RandomWrapper.Value.Next();
+        // 生成一个[0, maxValue)的整数
         public int Next(int maxValue) =>
             RandomWrapper.Value.Next(maxValue);
+        // 生成一个[minValue, maxValue)的整数
         public int Next(int minValue, int maxValue) =>
             RandomWrapper.Value.Next(minValue, maxValue);
     }
@@ -73,9 +76,9 @@ namespace Server.MirEnvir
         public readonly Stopwatch Stopwatch = Stopwatch.StartNew();
 
         public long Time { get; private set; }
-        public RespawnTimer RespawnTick = new RespawnTimer();
+        public RespawnTimer RespawnTick = new RespawnTimer(); // 貌似是刷新怪物的计时器
 
-        private static List<string> DisabledCharNames = new List<string>();
+        private static List<string> DisabledCharNames = new List<string>(); // 敏感词？
         private static List<string> LineMessages = new List<string>();
 
         public DateTime Now =>
@@ -93,7 +96,7 @@ namespace Server.MirEnvir
         public int[] OnlineRankingCount = new int[6];
         public int HeroCount => Heroes.Count;
 
-        public RandomProvider Random = new RandomProvider();
+        public RandomProvider Random = new RandomProvider(); // 随机数生成器
 
         private Thread _thread;
         private TcpListener _listener;
@@ -169,7 +172,7 @@ namespace Server.MirEnvir
         public List<MapRespawn> SavedSpawns = new List<MapRespawn>();
 
         public List<RankCharacterInfo> RankTop = new List<RankCharacterInfo>();
-        public List<RankCharacterInfo>[] RankClass = new List<RankCharacterInfo>[5];
+        public List<RankCharacterInfo>[] RankClass = new List<RankCharacterInfo>[5]; // 排行榜
 
         static HttpServer http;
 
@@ -188,6 +191,11 @@ namespace Server.MirEnvir
         private long warTime, guildTime, conquestTime, rentalItemsTime, auctionTime, spawnTime, robotTime, timerTime;
         private int dailyTime = DateTime.UtcNow.Day;
 
+        /// <summary>判断技能是否存在</summary>
+        /// <param name="spell">spell是技能集合的枚举值，表示某个技能</param>
+        /// <returns>
+        ///   <br />true, 技能存在
+        /// </returns>
         private bool MagicExists(Spell spell)
         {
             for (var i = 0; i < MagicInfoList.Count; i++)
@@ -197,6 +205,9 @@ namespace Server.MirEnvir
             return false;
         }
 
+        /// <summary>
+        ///   更新部分英雄技能的某些属性值
+        /// </summary>
         private void UpdateMagicInfo()
         {
             for (var i = 0; i < MagicInfoList.Count; i++)
@@ -236,12 +247,12 @@ namespace Server.MirEnvir
                         MagicInfoList[i].MultiplierBonus = 0.25f;
                         break;
                     //wiz
-                    case Spell.Repulsion:
-                        MagicInfoList[i].MPowerBase = 4;
+                    case Spell.Repulsion: // 抗拒火环
+                        MagicInfoList[i].MPowerBase      = 4;
                         break;
                     //tao
-                    case Spell.Poisoning:
-                        MagicInfoList[i].MPowerBase = 0;
+                    case Spell.Poisoning: // 施毒术
+                        MagicInfoList[i].MPowerBase      = 0;
                         break;
                     case Spell.Curse:
                         MagicInfoList[i].MPowerBase = 20;
@@ -279,6 +290,7 @@ namespace Server.MirEnvir
             }
         }
 
+        /// <summary>填充技能信息数组.</summary>
         private void FillMagicInfoList()
         {
             //Warrior
@@ -403,8 +415,14 @@ namespace Server.MirEnvir
             if (!MagicExists(Spell.MeteorShower)) MagicInfoList.Add(new MagicInfo { Name = "MeteorShower", Spell = Spell.MeteorShower, Icon = 4, Level1 = 15, Level2 = 18, Level3 = 21, Need1 = 2000, Need2 = 2700, Need3 = 3500, BaseCost = 5, LevelCost = 1, MPowerBase = 6, PowerBase = 10, Range = 9 });
         }
 
+
+        /// <summary>启动服务端时的环境检查</summary>
+        /// <returns>
+        ///   <br />错误信息描述
+        /// </returns>
         private string CanStartEnvir()
         {
+            // 启动服务端最少需要1张地图和1个安全区
             if (StartPoints.Count == 0) return "Cannot start server without atleast 1 Map and StartPoint.";
 
             if (Settings.EnforceDBChecks)
@@ -473,18 +491,19 @@ namespace Server.MirEnvir
             return "true";
         }
 
+        /// <summary>服务端线程中工作函数</summary>
         private void WorkLoop()
         {
             try
             {
                 Time = Stopwatch.ElapsedMilliseconds;
 
-                var conTime = Time;
-                var saveTime = Time + Settings.SaveDelay * Settings.Minute;
-                var userTime = Time + Settings.Minute * 5;
-                var lineMessageTime = Time + Settings.Minute * Settings.LineMessageTimer;
-                var processTime = Time + 1000;
-                var startTime = Time;
+                var conTime         = Time;
+                var saveTime        = Time + Settings.SaveDelay * Settings.Minute;        // 下一次DB自动保存的时刻（当前时刻 + 5分钟）
+                var userTime        = Time + Settings.Minute * 5;
+                var lineMessageTime = Time + Settings.Minute * Settings.LineMessageTimer; // 下一次发系统消息的时刻
+                var processTime     = Time + 1000;
+                var startTime       = Time;                                               // 服务端启动时刻
 
                 var processCount = 0;
                 var processRealCount = 0;
@@ -522,7 +541,7 @@ namespace Server.MirEnvir
                     }
                 }
 
-                StartNetwork();
+                StartNetwork(); // 启动网络服务
                 if (Settings.StartHTTPService)
                 {
                     http = new HttpServer();
@@ -530,6 +549,7 @@ namespace Server.MirEnvir
                 }
                 try
                 {
+                    // 服务端启动完成后，进入处理循环
                     while (Running)
                     {
                         Time = Stopwatch.ElapsedMilliseconds;
@@ -547,10 +567,11 @@ namespace Server.MirEnvir
                         {
                             conTime = Time;
 
-                            AdjustLights();
+                            //AdjustLights(); // 随时间调整光亮度。删掉，不需要
 
                             lock (Connections)
                             {
+                                // 处理每个客户端连接的收包以及发包给客户端
                                 for (var i = Connections.Count - 1; i >= 0; i--)
                                 {
                                     Connections[i].Process();
@@ -905,6 +926,7 @@ namespace Server.MirEnvir
             for (var i = 0; i < Players.Count; i++) Players[i].HasUpdatedBaseStats = false;
         }
 
+        /// <summary>以序列化的方式保存信息到数据库文件中</summary>
         public void SaveDB()
         {
             using (var stream = File.Create(DatabasePath))
@@ -1031,19 +1053,19 @@ namespace Server.MirEnvir
                 writer.Write(NextUserItemID);
                 writer.Write(NextHeroID);
 
-                writer.Write(GuildList.Count);
-                writer.Write(NextGuildID);
-                writer.Write(HeroList.Count);
+                writer.Write(GuildList.Count);                          // 行会数量
+                writer.Write(NextGuildID);                              // 下一个行会ID
+                writer.Write(HeroList.Count);                           // 角色数量
                 for (var i = 0; i < HeroList.Count; i++)
-                    HeroList[i].Save(writer);
-                writer.Write(AccountList.Count);
+                    HeroList[i].Save(writer);                           // 角色信息
+                writer.Write(AccountList.Count);                        // 账户数量
                 for (var i = 0; i < AccountList.Count; i++)
-                    AccountList[i].Save(writer);
+                    AccountList[i].Save(writer);                        // 账户信息
 
-                writer.Write(NextAuctionID);
-                writer.Write(Auctions.Count);
+                writer.Write(NextAuctionID);                            // 下一个拍卖ID
+                writer.Write(Auctions.Count);                           // 拍卖数量
                 foreach (var auction in Auctions)
-                    auction.Save(writer);
+                    auction.Save(writer);                               // 拍卖信息
 
                 writer.Write(NextMailID);
 
@@ -1101,6 +1123,8 @@ namespace Server.MirEnvir
             }
         }
 
+        /// <summary>保存所有地图上的所有NPC的商品</summary>
+        /// <param name="forced">是否强制保存</param>
         private void SaveGoods(bool forced = false)
         {
             if (!Directory.Exists(Settings.GoodsPath)) Directory.CreateDirectory(Settings.GoodsPath);
@@ -1252,10 +1276,13 @@ namespace Server.MirEnvir
             Saving = false;
         }
 
+        /// <summary>从数据库文件中序列化读取信息</summary>
+        /// <returns>true if success<br /></returns>
         public bool LoadDB()
         {
             lock (LoadLock)
             {
+                // 文件名Server.MirDB
                 if (!File.Exists(DatabasePath))
                 {
                     SaveDB();
@@ -1264,9 +1291,10 @@ namespace Server.MirEnvir
                 using (var stream = File.OpenRead(DatabasePath))
                 using (var reader = new BinaryReader(stream))
                 {
-                    LoadVersion = reader.ReadInt32();
-                    LoadCustomVersion = reader.ReadInt32();
+                    LoadVersion       = reader.ReadInt32();     // 数据库版本，4字节
+                    LoadCustomVersion = reader.ReadInt32();     // CustomVersion，4字节
 
+                    // 数据库版本检查，须满足：60 <= 数据库版本 <= 105
                     if (LoadVersion < MinVersion)
                     {
                         MessageQueue.Enqueue($"Cannot load a database version {LoadVersion}. Mininum supported is {MinVersion}.");
@@ -1279,78 +1307,88 @@ namespace Server.MirEnvir
 
                     }
 
-                    MapIndex = reader.ReadInt32();
-                    ItemIndex = reader.ReadInt32();
-                    MonsterIndex = reader.ReadInt32();
+                    MapIndex          = reader.ReadInt32();     // 地图数量，4字节
+                    ItemIndex         = reader.ReadInt32();     // 物品数量，4字节
+                    MonsterIndex      = reader.ReadInt32();     // 怪物数量，4字节
 
-                    NPCIndex = reader.ReadInt32();
-                    QuestIndex = reader.ReadInt32();
+                    NPCIndex          = reader.ReadInt32();     // NPC数量，4字节
+                    QuestIndex        = reader.ReadInt32();     // 任务数量？4字节
 
                     if (LoadVersion >= 63)
                     {
-                        GameshopIndex = reader.ReadInt32();
+                        GameshopIndex = reader.ReadInt32();     // 商店数量，4字节
                     }
 
                     if (LoadVersion >= 66)
                     {
-                        ConquestIndex = reader.ReadInt32();
+                        ConquestIndex = reader.ReadInt32();     // 领地数量？4字节
                     }
 
                     if (LoadVersion >= 68)
-                        RespawnIndex = reader.ReadInt32();
+                        RespawnIndex  = reader.ReadInt32();     // 复活点数量？4字节
 
 
-                    var count = reader.ReadInt32();
-                    MapInfoList.Clear();
-                    for (var i = 0; i < count; i++)
-                        MapInfoList.Add(new MapInfo(reader));
+                    var count         = reader.ReadInt32();     // MapInfo的数量？4字节
+                    MapInfoList.Clear();                        // 清空地图信息数组
+                    for (var i = 0; i < count; i++)             // 初始化地图信息数组
+                    {
+                        MapInfo mi = new MapInfo(reader);
+                        MapInfoList.Add(mi);
+#if DEBUG
+                        MessageQueue.EnqueueDebugging($"MapInfo(Index:{mi.Index}, FileName:{mi.FileName}), Title:{mi.Title}");
+#endif
+                    }
 
-                    count = reader.ReadInt32();
-                    ItemInfoList.Clear();
-                    for (var i = 0; i < count; i++)
+                    MessageQueue.EnqueueDebugging($"{MapInfoList.Count} MapInfo loaded.");
+
+                    count = reader.ReadInt32();                 // 物品信息数量
+                    ItemInfoList.Clear();                       // 清空物品信息数组
+                    for (var i = 0; i < count; i++)             // 初始化物品信息数组
                     {
                         ItemInfoList.Add(new ItemInfo(reader, LoadVersion, LoadCustomVersion));
                         if (ItemInfoList[i] != null && ItemInfoList[i].RandomStatsId < Settings.RandomItemStatsList.Count)
                         {
+                                                                // 设置物品的某些随机属性（持久、准确等）
                             ItemInfoList[i].RandomStats = Settings.RandomItemStatsList[ItemInfoList[i].RandomStatsId];
                         }
                     }
-                    count = reader.ReadInt32();
-                    MonsterInfoList.Clear();
-                    for (var i = 0; i < count; i++)
+                    count = reader.ReadInt32();                 // 怪物信息数量
+                    MonsterInfoList.Clear();                    // 清空怪物信息数组
+                    for (var i = 0; i < count; i++)             // 初始化怪物信息数组
                         MonsterInfoList.Add(new MonsterInfo(reader));
 
-                    count = reader.ReadInt32();
-                    NPCInfoList.Clear();
-                    for (var i = 0; i < count; i++)
+                    count = reader.ReadInt32();                 // NPC信息数量
+                    NPCInfoList.Clear();                        // 清空PC信息数组
+                    for (var i = 0; i < count; i++)             // 初始化NPC信息数组
                         NPCInfoList.Add(new NPCInfo(reader));
 
-                    count = reader.ReadInt32();
-                    QuestInfoList.Clear();
-                    for (var i = 0; i < count; i++)
+                    count = reader.ReadInt32();                 // 任务信息数量？
+                    QuestInfoList.Clear();                      // 清空任务信息数组
+                    for (var i = 0; i < count; i++)             // 初始化任务信息数组
                         QuestInfoList.Add(new QuestInfo(reader));
 
-                    DragonInfo = new DragonInfo(reader);
-                    count = reader.ReadInt32();
-                    for (var i = 0; i < count; i++)
+                    DragonInfo = new DragonInfo(reader);        // 大Boss信息
+
+                    count = reader.ReadInt32();                 // 技能信息数量
+                    for (var i = 0; i < count; i++)             // 初始化技能信息数组
                     {
                         var m = new MagicInfo(reader, LoadVersion, LoadCustomVersion);
                         if (!MagicExists(m.Spell))
                             MagicInfoList.Add(m);
                     }
 
-                    FillMagicInfoList();
+                    FillMagicInfoList();                        // 填充更多的技能信息到技能信息数组
                     if (LoadVersion <= 70)
-                        UpdateMagicInfo();
+                        UpdateMagicInfo();                      // 更新技能信息数组中的技能属性
 
                     if (LoadVersion >= 63)
                     {
-                        count = reader.ReadInt32();
-                        GameShopList.Clear();
-                        for (var i = 0; i < count; i++)
+                        count = reader.ReadInt32();             // GameShop中的商品数量（元宝商店？）
+                        GameShopList.Clear();                   // 清空商品数组
+                        for (var i = 0; i < count; i++)         // 初始化商品数组
                         {
                             var item = new GameShopItem(reader, LoadVersion, LoadCustomVersion);
-                            if (Main.BindGameShop(item))
+                            if (Main.BindGameShop(item))        // 元宝商品须已在ItemInfo数组
                             {
                                 GameShopList.Add(item);
                             }
@@ -1359,20 +1397,20 @@ namespace Server.MirEnvir
 
                     if (LoadVersion >= 66)
                     {
-                        ConquestInfoList.Clear();
-                        count = reader.ReadInt32();
-                        for (var i = 0; i < count; i++)
+                        ConquestInfoList.Clear();               // 清空任务信息数组
+                        count = reader.ReadInt32();             // 任务信息数量
+                        for (var i = 0; i < count; i++)         // 初始化任务信息数组
                         {
                             ConquestInfoList.Add(new ConquestInfo(reader));
                         }
                     }
 
                     if (LoadVersion > 67)
-                        RespawnTick = new RespawnTimer(reader);
+                        RespawnTick = new RespawnTimer(reader); // 初始化复活计时器
 
                 }
 
-                Settings.LinkGuildCreationItems(ItemInfoList);
+                Settings.LinkGuildCreationItems(ItemInfoList);  // 初始化行会商店物品
             }
 
             return true;
@@ -1667,6 +1705,7 @@ namespace Server.MirEnvir
             return bound;
         }
 
+        /// <summary>启动服务端</summary>
         public void Start()
         {
             if (Running || _thread != null) return;
@@ -1674,7 +1713,7 @@ namespace Server.MirEnvir
             Running = true;
 
             _thread = new Thread(WorkLoop) { IsBackground = true };
-            _thread.Start();
+            _thread.Start(); // 后台启动服务端线程
 
         }
         public void Stop()
@@ -1717,27 +1756,29 @@ namespace Server.MirEnvir
             }).Start();
         }
 
+        /// <summary>初始化服务端环境</summary>
         private void StartEnvir()
         {
-            Players.Clear();
-            StartPoints.Clear();
-            StartItems.Clear();
-            MapList.Clear();
-            GameshopLog.Clear();
-            CustomCommands.Clear();
-            Heroes.Clear();
-            MonsterCount = 0;
+            Players.Clear();        // 清空玩家数组
+            StartPoints.Clear();    // 清空安全区数组
+            StartItems.Clear();     // StartItems是啥？
+            MapList.Clear();        // 清空地图数组
+            GameshopLog.Clear();    // 清空商店日志字典？
+            CustomCommands.Clear(); // 清空自定义命令数组？
+            Heroes.Clear();         // 清空英雄数组（双英雄玩法？）
+            MonsterCount = 0;       // 怪物数量
 
-            LoadDB();
+            LoadDB(); // 从数据库加载数据，初始化各种信息数组
 
             BuffInfoList.Clear();
-            foreach (var buff in BuffInfo.Load())
+            foreach (var buff in BuffInfo.Load()) // 初始化Buff信息数组
             {
                 BuffInfoList.Add(buff);
             }
 
             MessageQueue.Enqueue($"{BuffInfoList.Count} Buffs Loaded.");
 
+            // 初始化药品制作信息数组
             RecipeInfoList.Clear();
             foreach (var recipe in Directory.GetFiles(Settings.RecipePath, "*.txt")
                 .Select(path => Path.GetFileNameWithoutExtension(path))
@@ -1748,12 +1789,14 @@ namespace Server.MirEnvir
 
             MessageQueue.Enqueue($"{RecipeInfoList.Count} Recipes Loaded.");
 
+            // 根据MapInfoList(地图信息数组)，创建地图，成功则记录到MapList(地图数组)
             for (var i = 0; i < MapInfoList.Count; i++)
             {
                 MapInfoList[i].CreateMap();
             }
             MessageQueue.Enqueue($"{MapInfoList.Count} Maps Loaded.");
 
+            // 遍历ItemInfoList(物品信息数组), 将StartItem属性的物品加入到StartItems数组
             for (var i = 0; i < ItemInfoList.Count; i++)
             {
                 if (ItemInfoList[i].StartItem)
@@ -1762,11 +1805,13 @@ namespace Server.MirEnvir
                 }
             }
 
+            // 加载掉落物的信息
             ReloadDrops();
 
-            LoadDisabledChars();
-            LoadLineMessages();
+            LoadDisabledChars(); // 加载敏感词
+            LoadLineMessages(); // 加载游戏中的一些Tips
 
+            // 红龙Boss
             if (DragonInfo.Enabled)
             {
                 DragonSystem = new Dragon(DragonInfo);
@@ -2720,6 +2765,10 @@ namespace Server.MirEnvir
             return false;
         }
 
+        /// <summary>判断元宝商店物品是否已在ItemInfo数组</summary>
+        /// <param name="item">元宝商店物品</param>
+        /// <param name="editEnvir">if set to <c>true</c> [edit envir].</param>
+        /// <returns>true, 如果元宝商品已在ItemInfo数组<br /></returns>
         public bool BindGameShop(GameShopItem item, bool editEnvir = true)
         {
             for (var i = 0; i < Edit.ItemInfoList.Count; i++)
@@ -2812,6 +2861,10 @@ namespace Server.MirEnvir
             return MapList.SelectMany(t1 => t1.NPCs.Where(t => t.Info.GameName.StartsWith(name, StringComparison.CurrentCultureIgnoreCase) && t.Info.ShowOnBigMap)).FirstOrDefault();
         }
 
+        /// <summary>根据怪物名称获取怪物信息</summary>
+        /// <param name="name">怪物名称</param>
+        /// <param name="Strict">比较名称时是否忽略大小写和空格</param>
+        /// <returns>怪物信息</returns>
         public MonsterInfo GetMonsterInfo(string name, bool Strict = false)
         {
             for (var i = 0; i < MonsterInfoList.Count; i++)
