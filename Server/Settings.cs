@@ -58,7 +58,8 @@ namespace Server
         public static string BlackstoneDropFilename = "00Blackstone";
 
         //Network
-        public static string IPAddress = "127.0.0.1";
+        //public static string IPAddress = "127.0.0.1";
+        public static string IPAddress = "0.0.0.0";
 
         public static ushort Port = 7000,
                              TimeOut = 10000,
@@ -81,7 +82,8 @@ namespace Server
                            AllowCreateAssassin = true,
                            AllowCreateArcher = true;
 
-        public static int AllowedResolution = 1024;
+        //public static int AllowedResolution = 1024; // 服务端为什么需要限制允许的分辨率？
+        public static int AllowedResolution = 1920; // 4K屏幕下1920 x 1080看的更舒服
 
         //Optional
         public static bool SafeZoneBorder = false,
@@ -96,7 +98,7 @@ namespace Server
         public static short CredxGold = 30;
 
         //Game
-        public static List<long> ExperienceList = new List<long>();
+        public static List<long> ExperienceList = new List<long>(); // 升级所需经验值
         public static List<long> OrbsExpList = new List<long>();
         public static List<long> OrbsDefList = new List<long>();
         public static List<long> OrbsDmgList = new List<long>();
@@ -117,52 +119,52 @@ namespace Server
                           RestedExpBonus = 5,
                           RestedMaxBonus = 24;
 
-        public static string SkeletonName = "BoneFamiliar",
-                             ShinsuName = "Shinsu",
-                             BugBatName = "BugBat",
-                             Zuma1 = "ZumaStatue",
-                             Zuma2 = "ZumaGuardian",
-                             Zuma3 = "ZumaArcher",
-                             Zuma4 = "WedgeMoth",
-                             Zuma5 = "ZumaArcher3",
-                             Zuma6 = "ZumaStatue3",
-                             Zuma7 = "ZumaGuardian3",
-                             Turtle1 = "RedTurtle",
-                             Turtle2 = "GreenTurtle",
-                             Turtle3 = "BlueTurtle",
-                             Turtle4 = "TowerTurtle",
-                             Turtle5 = "FinialTurtle",
-                             BoneMonster1 = "BoneSpearman",
-                             BoneMonster2 = "BoneBlademan",
-                             BoneMonster3 = "BoneArcher",
-                             BoneMonster4 = "BoneCaptain",
-                             BehemothMonster1 = "Hugger",
-                             BehemothMonster2 = "PoisonHugger",
-                             BehemothMonster3 = "MutatedHugger",
-                             HellKnight1 = "HellKnight1",
-                             HellKnight2 = "HellKnight2",
-                             HellKnight3 = "HellKnight3",
-                             HellKnight4 = "HellKnight4",
-                             HellBomb1 = "HellBomb1",
-                             HellBomb2 = "HellBomb2",
-                             HellBomb3 = "HellBomb3",
-                             WhiteSnake = "WhiteSerpent",
-                             AngelName = "HolyDeva",
-                             BombSpiderName = "BombSpider",
-                             CloneName = "Clone",
-                             AssassinCloneName = "AssassinClone",
-                             VampireName = "VampireSpider",
-                             ToadName = "SpittingToad",
-                             SnakeTotemName = "SnakeTotem",
-                             SnakesName = "CharmedSnake",
-                             AncientBatName = "AncientBat",
-                             TucsonGeneralEgg = "GeneralTucson",
-                             GeneralMeowMeowMob1 = "StainHammerCat",
-                             GeneralMeowMeowMob2 = "BlackHammerCat",
-                             GeneralMeowMeowMob3 = "StrayCat",
-                             GeneralMeowMeowMob4 = "CatShaman",
-                             KingHydraxMob = "Hydrax",
-                             HornedCommanderMob = "HornedSorceror",
+        public static string SkeletonName           = "BoneFamiliar", // 变异骷髅
+                             ShinsuName             = "Shinsu",       // 神兽
+                             BugBatName             = "BugBat",       // 角蝇
+                             Zuma1                  = "ZumaStatue",   // 祖玛雕像
+                             Zuma2                  = "ZumaGuardian", // 祖玛守卫
+                             Zuma3                  = "ZumaArcher",   // 祖玛射手
+                             Zuma4                  = "WedgeMoth",
+                             Zuma5                  = "ZumaArcher3",
+                             Zuma6                  = "ZumaStatue3",
+                             Zuma7                  = "ZumaGuardian3",
+                             Turtle1                = "RedTurtle", 
+                             Turtle2                = "GreenTurtle",
+                             Turtle3                = "BlueTurtle",
+                             Turtle4                = "TowerTurtle",
+                             Turtle5                = "FinialTurtle",
+                             BoneMonster1           = "BoneSpearman",
+                             BoneMonster2           = "BoneBlademan",
+                             BoneMonster3           = "BoneArcher",
+                             BoneMonster4           = "BoneCaptain",
+                             BehemothMonster1       = "Hugger",
+                             BehemothMonster2       = "PoisonHugger",
+                             BehemothMonster3       = "MutatedHugger",
+                             HellKnight1            = "HellKnight1",
+                             HellKnight2            = "HellKnight2",
+                             HellKnight3            = "HellKnight3",
+                             HellKnight4            = "HellKnight4",
+                             HellBomb1              = "HellBomb1",
+                             HellBomb2              = "HellBomb2",
+                             HellBomb3              = "HellBomb3",
+                             WhiteSnake             = "WhiteSerpent",
+                             AngelName              = "HolyDeva",
+                             BombSpiderName         = "BombSpider",
+                             CloneName              = "Clone",
+                             AssassinCloneName      = "AssassinClone",
+                             VampireName            = "VampireSpider",
+                             ToadName               = "SpittingToad",
+                             SnakeTotemName         = "SnakeTotem",
+                             SnakesName             = "CharmedSnake",
+                             AncientBatName         = "AncientBat",
+                             TucsonGeneralEgg       = "GeneralTucson",
+                             GeneralMeowMeowMob1    = "StainHammerCat",
+                             GeneralMeowMeowMob2    = "BlackHammerCat",
+                             GeneralMeowMeowMob3    = "StrayCat",
+                             GeneralMeowMeowMob4    = "CatShaman",
+                             KingHydraxMob          = "Hydrax",
+                             HornedCommanderMob     = "HornedSorceror",
                              HornedCommanderBombMob = "BoulderSpirit",
                              SnowWolfKingMob = "SnowWolf",
                              ScrollMob1 = "WarriorScroll",
@@ -171,10 +173,10 @@ namespace Server
                              ScrollMob4 = "AssassinScroll",
                              HeroName = "Hero";
 
-        public static string HealRing = "Healing",
-                             FireRing = "FireBall",
-                             ParalysisRing = "Paralysis",
-                             BlinkSkill = "Blink";
+        public static string HealRing      = "Healing",   // 治疗戒指
+                             FireRing      = "FireBall",  // 火焰戒指
+                             ParalysisRing = "Paralysis", // 麻痹戒指
+                             BlinkSkill    = "Blink";
 
         public static string PKTownMapName = "3";
         public static int PKTownPositionX = 848,
@@ -185,49 +187,49 @@ namespace Server
 
         public static string CreatureBlackStoneName = "BlackCreatureStone";
 
-        //Fishing Settings
-        public static int FishingAttempts = 30;
-        public static int FishingSuccessStart = 10;
-        public static int FishingSuccessMultiplier = 10;
-        public static long FishingDelay = 0;
-        public static int FishingMobSpawnChance = 5;
-        public static string FishingMonster = "GiantKeratoid";
+        //Fishing Settings 钓鱼设置
+        public static int FishingAttempts              = 30;
+        public static int FishingSuccessStart          = 10;
+        public static int FishingSuccessMultiplier     = 10;
+        public static long FishingDelay                = 0;
+        public static int FishingMobSpawnChance        = 5;
+        public static string FishingMonster            = "GiantKeratoid";
 
-        //Mail Settings
-        public static bool MailAutoSendGold = false;
-        public static bool MailAutoSendItems = false;
-        public static bool MailFreeWithStamp = true;
-        public static uint MailCostPer1KGold = 100;
+        //Mail Settings 邮件设置
+        public static bool MailAutoSendGold            = false;
+        public static bool MailAutoSendItems           = false;
+        public static bool MailFreeWithStamp           = true;
+        public static uint MailCostPer1KGold           = 100;
         public static uint MailItemInsurancePercentage = 5;
-        public static uint MailCapacity = 100;
+        public static uint MailCapacity                = 100;
 
-        //Refine Settings
-        public static bool OnlyRefineWeapon = true;
-        public static byte RefineBaseChance = 20;
-        public static int RefineTime = 20;
-        public static byte RefineIncrease = 1;
-        public static byte RefineCritChance = 10;
-        public static byte RefineCritIncrease = 2;
-        public static byte RefineWepStatReduce = 6;
-        public static byte RefineItemStatReduce = 15;
-        public static int RefineCost = 125;
+        //Refine Settings 锻造设置
+        public static bool OnlyRefineWeapon            = true;
+        public static byte RefineBaseChance            = 20;
+        public static int RefineTime                   = 20;
+        public static byte RefineIncrease              = 1;
+        public static byte RefineCritChance            = 10;
+        public static byte RefineCritIncrease          = 2;
+        public static byte RefineWepStatReduce         = 6;
+        public static byte RefineItemStatReduce        = 15;
+        public static int RefineCost                   = 125;
 
-        public static string RefineOreName = "BlackIronOre";
+        public static string RefineOreName             = "BlackIronOre";
 
-        //Marriage Settings
-        public static int LoverEXPBonus = 5;
-        public static int MarriageCooldown = 7;
-        public static bool WeddingRingRecall = true;
-        public static int MarriageLevelRequired = 10;
-        public static int ReplaceWedRingCost = 125;
+        //Marriage Settings 结婚设置
+        public static int LoverEXPBonus                = 5;
+        public static int MarriageCooldown             = 7;
+        public static bool WeddingRingRecall           = true;
+        public static int MarriageLevelRequired        = 10;
+        public static int ReplaceWedRingCost           = 125;
 
-        //Mentor Settings
-        public static byte MentorLevelGap = 10;
-        public static bool MentorSkillBoost = true;
-        public static byte MentorLength = 7;
-        public static byte MentorDamageBoost = 10;
-        public static byte MentorExpBoost = 10;
-        public static byte MenteeExpBank = 1;
+        //Mentor Settings 师徒设置
+        public static byte MentorLevelGap              = 10;
+        public static bool MentorSkillBoost            = true;
+        public static byte MentorLength                = 7;
+        public static byte MentorDamageBoost           = 10;
+        public static byte MentorExpBoost              = 10;
+        public static byte MenteeExpBank               = 1;
 
         //Gem Settings
         public static bool GemStatIndependent = true;
@@ -257,7 +259,7 @@ namespace Server
                             ManaRegenWeight = 10,
                             MaxLuck = 10;
 
-        public static ushort ItemSealDelay = 60;
+        public static ushort ItemSealDelay = 60; // 物品别人不可拾取时间？
 
         public static bool PvpCanResistMagic = false,
                               PvpCanResistPoison = false,
@@ -316,22 +318,22 @@ namespace Server
         public static void Load()
         {            
             //General
-            VersionPath = Reader.ReadString("General", "VersionPath", VersionPath);
-            CheckVersion = Reader.ReadBoolean("General", "CheckVersion", CheckVersion);
-            RelogDelay = Reader.ReadUInt16("General", "RelogDelay", RelogDelay);
-            GMPassword = Reader.ReadString("General", "GMPassword", GMPassword);
-            Multithreaded = Reader.ReadBoolean("General", "Multithreaded", Multithreaded);
-            ThreadLimit = Reader.ReadInt32("General", "ThreadLimit", ThreadLimit);
-            TestServer = Reader.ReadBoolean("General", "TestServer", TestServer);
-            EnforceDBChecks = Reader.ReadBoolean("General", "EnforceDBChecks", EnforceDBChecks);
-            MonsterProcessWhenAlone = Reader.ReadBoolean("General", "MonsterProcessWhenAlone", MonsterProcessWhenAlone);
+            VersionPath             = Reader.ReadString("General", "VersionPath", VersionPath);                          // 版本
+            CheckVersion            = Reader.ReadBoolean("General", "CheckVersion", CheckVersion);                       // CheckVersion
+            RelogDelay              = Reader.ReadUInt16("General", "RelogDelay", RelogDelay);                            // 重新登录延迟
+            GMPassword              = Reader.ReadString("General", "GMPassword", GMPassword);                            // GM密码
+            Multithreaded           = Reader.ReadBoolean("General", "Multithreaded", Multithreaded);                     // 是否多线程
+            ThreadLimit             = Reader.ReadInt32("General", "ThreadLimit", ThreadLimit);                           // 线程数量限制
+            TestServer              = Reader.ReadBoolean("General", "TestServer", TestServer);                           // 是否是测试服务器
+            EnforceDBChecks         = Reader.ReadBoolean("General", "EnforceDBChecks", EnforceDBChecks);                 // 是否强制数据库检查
+            MonsterProcessWhenAlone = Reader.ReadBoolean("General", "MonsterProcessWhenAlone", MonsterProcessWhenAlone); // 怪物附近没玩家时是否执行AI逻辑
 
             //Paths
-            IPAddress = Reader.ReadString("Network", "IPAddress", IPAddress);
-            Port = Reader.ReadUInt16("Network", "Port", Port);
-            TimeOut = Reader.ReadUInt16("Network", "TimeOut", TimeOut);
-            MaxUser = Reader.ReadUInt16("Network", "MaxUser", MaxUser);
-            MaxIP = Reader.ReadUInt16("Network", "MaxIP", MaxIP);
+            IPAddress = Reader.ReadString("Network", "IPAddress", IPAddress); // 启动服务器时监听的IP地址
+            Port      = Reader.ReadUInt16("Network", "Port", Port);           // 监听的端口
+            TimeOut   = Reader.ReadUInt16("Network", "TimeOut", TimeOut);     // 连接超时设定
+            MaxUser   = Reader.ReadUInt16("Network", "MaxUser", MaxUser);     // 最大用户数
+            MaxIP     = Reader.ReadUInt16("Network", "MaxIP", MaxIP);         // 同一个IP下最大连接数（多开限制）
 
             //HTTP
             StartHTTPService = Reader.ReadBoolean("Network", "StartHTTPService", StartHTTPService);
@@ -339,21 +341,21 @@ namespace Server
             HTTPTrustedIPAddress = Reader.ReadString("Network", "HTTPTrustedIPAddress", HTTPTrustedIPAddress);
 
             //Permission
-            AllowNewAccount = Reader.ReadBoolean("Permission", "AllowNewAccount", AllowNewAccount);
-            AllowChangePassword = Reader.ReadBoolean("Permission", "AllowChangePassword", AllowChangePassword);
-            AllowLogin = Reader.ReadBoolean("Permission", "AllowLogin", AllowLogin);
-            AllowNewCharacter = Reader.ReadBoolean("Permission", "AllowNewCharacter", AllowNewCharacter);
-            AllowDeleteCharacter = Reader.ReadBoolean("Permission", "AllowDeleteCharacter", AllowDeleteCharacter);
-            AllowStartGame = Reader.ReadBoolean("Permission", "AllowStartGame", AllowStartGame);
-            AllowCreateAssassin = Reader.ReadBoolean("Permission", "AllowCreateAssassin", AllowCreateAssassin);
-            AllowCreateArcher = Reader.ReadBoolean("Permission", "AllowCreateArcher", AllowCreateArcher);
-            AllowedResolution = Reader.ReadInt32("Permission", "MaxResolution", AllowedResolution);
+            AllowNewAccount      = Reader.ReadBoolean("Permission", "AllowNewAccount", AllowNewAccount);          // 是否允许创建账户
+            AllowChangePassword  = Reader.ReadBoolean("Permission", "AllowChangePassword", AllowChangePassword);  // 是否允许修改密码
+            AllowLogin           = Reader.ReadBoolean("Permission", "AllowLogin", AllowLogin);                    // 是否允许登录
+            AllowNewCharacter    = Reader.ReadBoolean("Permission", "AllowNewCharacter", AllowNewCharacter);      // 是否允许创建新角色
+            AllowDeleteCharacter = Reader.ReadBoolean("Permission", "AllowDeleteCharacter", AllowDeleteCharacter);// 是否允许删除角色
+            AllowStartGame       = Reader.ReadBoolean("Permission", "AllowStartGame", AllowStartGame);            // 是否允许开始游戏
+            AllowCreateAssassin  = Reader.ReadBoolean("Permission", "AllowCreateAssassin", AllowCreateAssassin);  // 是否允许创建刺客角色
+            AllowCreateArcher    = Reader.ReadBoolean("Permission", "AllowCreateArcher", AllowCreateArcher);      // 是否允许创建射手角色
+            AllowedResolution    = Reader.ReadInt32("Permission", "MaxResolution", AllowedResolution);            // 是否允许修改分辨率？
 
             //Optional
-            SafeZoneBorder = Reader.ReadBoolean("Optional", "SafeZoneBorder", SafeZoneBorder);
-            SafeZoneHealing = Reader.ReadBoolean("Optional", "SafeZoneHealing", SafeZoneHealing);
-            GatherOrbsPerLevel = Reader.ReadBoolean("Optional", "GatherOrbsPerLevel", GatherOrbsPerLevel);
-            ExpMobLevelDifference = Reader.ReadBoolean("Optional", "ExpMobLevelDifference", ExpMobLevelDifference);
+            SafeZoneBorder = Reader.ReadBoolean("Optional", "SafeZoneBorder", SafeZoneBorder); // 是否标出安全区边界
+            SafeZoneHealing = Reader.ReadBoolean("Optional", "SafeZoneHealing", SafeZoneHealing); // 安全区是否回血？
+            GatherOrbsPerLevel = Reader.ReadBoolean("Optional", "GatherOrbsPerLevel", GatherOrbsPerLevel); // 
+            ExpMobLevelDifference = Reader.ReadBoolean("Optional", "ExpMobLevelDifference", ExpMobLevelDifference); // 
             GameMasterEffect = Reader.ReadBoolean("Optional", "GameMasterEffect", GameMasterEffect);
             LineMessageTimer = Reader.ReadInt32("Optional", "LineMessageTimer", LineMessageTimer);
 
@@ -362,69 +364,69 @@ namespace Server
             CredxGold = Reader.ReadInt16("Database", "CredxGold", CredxGold);
 
             //Game
-            DropRate = Reader.ReadSingle("Game", "DropRate", DropRate);
-            ExpRate = Reader.ReadSingle("Game", "ExpRate", ExpRate);
-            ItemTimeOut = Reader.ReadInt32("Game", "ItemTimeOut", ItemTimeOut);
-            PlayerDiedItemTimeOut = Reader.ReadInt32("Game", "PlayerDiedItemTimeOut", PlayerDiedItemTimeOut);
-            PetSave = Reader.ReadBoolean("Game", "PetSave", PetSave);
-            PKDelay = Reader.ReadInt32("Game", "PKDelay", PKDelay);
-            SkeletonName = Reader.ReadString("Game", "SkeletonName", SkeletonName);
-            BugBatName = Reader.ReadString("Game", "BugBatName", BugBatName);
-            ShinsuName = Reader.ReadString("Game", "ShinsuName", ShinsuName);
-            Zuma1 = Reader.ReadString("Game", "Zuma1", Zuma1);
-            Zuma2 = Reader.ReadString("Game", "Zuma2", Zuma2);
-            Zuma3 = Reader.ReadString("Game", "Zuma3", Zuma3);
-            Zuma4 = Reader.ReadString("Game", "Zuma4", Zuma4);
-            Zuma5 = Reader.ReadString("Game", "Zuma5", Zuma5);
-            Zuma6 = Reader.ReadString("Game", "Zuma6", Zuma6);
-            Zuma7 = Reader.ReadString("Game", "Zuma7", Zuma7);
-            Turtle1 = Reader.ReadString("Game", "Turtle1", Turtle1);
-            Turtle2 = Reader.ReadString("Game", "Turtle2", Turtle2);
-            Turtle3 = Reader.ReadString("Game", "Turtle3", Turtle3);
-            Turtle4 = Reader.ReadString("Game", "Turtle4", Turtle4);
-            Turtle5 = Reader.ReadString("Game", "Turtle5", Turtle5);
-            BoneMonster1 = Reader.ReadString("Game", "BoneMonster1", BoneMonster1);
-            BoneMonster2 = Reader.ReadString("Game", "BoneMonster2", BoneMonster2);
-            BoneMonster3 = Reader.ReadString("Game", "BoneMonster3", BoneMonster3);
-            BoneMonster4 = Reader.ReadString("Game", "BoneMonster4", BoneMonster4);
-            BehemothMonster1 = Reader.ReadString("Game", "BehemothMonster1", BehemothMonster1);
-            BehemothMonster2 = Reader.ReadString("Game", "BehemothMonster2", BehemothMonster2);
-            BehemothMonster3 = Reader.ReadString("Game", "BehemothMonster3", BehemothMonster3);
-            HellKnight1 = Reader.ReadString("Game", "HellKnight1", HellKnight1);
-            HellKnight2 = Reader.ReadString("Game", "HellKnight2", HellKnight2);
-            HellKnight3 = Reader.ReadString("Game", "HellKnight3", HellKnight3);
-            HellKnight4 = Reader.ReadString("Game", "HellKnight4", HellKnight4);
-            HellBomb1 = Reader.ReadString("Game", "HellBomb1", HellBomb1);
-            HellBomb2 = Reader.ReadString("Game", "HellBomb2", HellBomb2);
-            HellBomb3 = Reader.ReadString("Game", "HellBomb3", HellBomb3);
-            GeneralMeowMeowMob1 = Reader.ReadString("Game", "GeneralMeowMeowMob1", GeneralMeowMeowMob1);
-            GeneralMeowMeowMob2 = Reader.ReadString("Game", "GeneralMeowMeowMob2", GeneralMeowMeowMob2);
-            GeneralMeowMeowMob3 = Reader.ReadString("Game", "GeneralMeowMeowMob3", GeneralMeowMeowMob3);
-            GeneralMeowMeowMob4 = Reader.ReadString("Game", "GeneralMeowMeowMob4", GeneralMeowMeowMob4);
-            KingHydraxMob = Reader.ReadString("Game", "KingHydraxMob", KingHydraxMob);
-            HornedCommanderMob = Reader.ReadString("Game", "HornedCommanderMob", HornedCommanderMob);
+            DropRate               = Reader.ReadSingle("Game", "DropRate", DropRate);                          // 物品掉落概率倍数
+            ExpRate                = Reader.ReadSingle("Game", "ExpRate", ExpRate);                            // 经验值倍数
+            ItemTimeOut            = Reader.ReadInt32("Game", "ItemTimeOut", ItemTimeOut);                     // 掉落物品的持续时间系数
+            PlayerDiedItemTimeOut  = Reader.ReadInt32("Game", "PlayerDiedItemTimeOut", PlayerDiedItemTimeOut); // 玩家死亡爆出物品的持续时间系数
+            PetSave                = Reader.ReadBoolean("Game", "PetSave", PetSave);                           // False的话，进入游戏时会重置宝宝的叛变时间
+            PKDelay                = Reader.ReadInt32("Game", "PKDelay", PKDelay);                             // 红名回复到白名的时间系数
+            SkeletonName           = Reader.ReadString("Game", "SkeletonName", SkeletonName);                  // 变异骷髅名称
+            BugBatName             = Reader.ReadString("Game", "BugBatName", BugBatName);                      // 角蝇名称
+            ShinsuName             = Reader.ReadString("Game", "ShinsuName", ShinsuName);                      // 神兽名称
+            Zuma1                  = Reader.ReadString("Game", "Zuma1", Zuma1);
+            Zuma2                  = Reader.ReadString("Game", "Zuma2", Zuma2);
+            Zuma3                  = Reader.ReadString("Game", "Zuma3", Zuma3);
+            Zuma4                  = Reader.ReadString("Game", "Zuma4", Zuma4);
+            Zuma5                  = Reader.ReadString("Game", "Zuma5", Zuma5);
+            Zuma6                  = Reader.ReadString("Game", "Zuma6", Zuma6);
+            Zuma7                  = Reader.ReadString("Game", "Zuma7", Zuma7);
+            Turtle1                = Reader.ReadString("Game", "Turtle1", Turtle1);
+            Turtle2                = Reader.ReadString("Game", "Turtle2", Turtle2);
+            Turtle3                = Reader.ReadString("Game", "Turtle3", Turtle3);
+            Turtle4                = Reader.ReadString("Game", "Turtle4", Turtle4);
+            Turtle5                = Reader.ReadString("Game", "Turtle5", Turtle5);
+            BoneMonster1           = Reader.ReadString("Game", "BoneMonster1", BoneMonster1);
+            BoneMonster2           = Reader.ReadString("Game", "BoneMonster2", BoneMonster2);
+            BoneMonster3           = Reader.ReadString("Game", "BoneMonster3", BoneMonster3);
+            BoneMonster4           = Reader.ReadString("Game", "BoneMonster4", BoneMonster4);
+            BehemothMonster1       = Reader.ReadString("Game", "BehemothMonster1", BehemothMonster1);
+            BehemothMonster2       = Reader.ReadString("Game", "BehemothMonster2", BehemothMonster2);
+            BehemothMonster3       = Reader.ReadString("Game", "BehemothMonster3", BehemothMonster3);
+            HellKnight1            = Reader.ReadString("Game", "HellKnight1", HellKnight1);
+            HellKnight2            = Reader.ReadString("Game", "HellKnight2", HellKnight2);
+            HellKnight3            = Reader.ReadString("Game", "HellKnight3", HellKnight3);
+            HellKnight4            = Reader.ReadString("Game", "HellKnight4", HellKnight4);
+            HellBomb1              = Reader.ReadString("Game", "HellBomb1", HellBomb1);
+            HellBomb2              = Reader.ReadString("Game", "HellBomb2", HellBomb2);
+            HellBomb3              = Reader.ReadString("Game", "HellBomb3", HellBomb3);
+            GeneralMeowMeowMob1    = Reader.ReadString("Game", "GeneralMeowMeowMob1", GeneralMeowMeowMob1);
+            GeneralMeowMeowMob2    = Reader.ReadString("Game", "GeneralMeowMeowMob2", GeneralMeowMeowMob2);
+            GeneralMeowMeowMob3    = Reader.ReadString("Game", "GeneralMeowMeowMob3", GeneralMeowMeowMob3);
+            GeneralMeowMeowMob4    = Reader.ReadString("Game", "GeneralMeowMeowMob4", GeneralMeowMeowMob4);
+            KingHydraxMob          = Reader.ReadString("Game", "KingHydraxMob", KingHydraxMob);
+            HornedCommanderMob     = Reader.ReadString("Game", "HornedCommanderMob", HornedCommanderMob);
             HornedCommanderBombMob = Reader.ReadString("Game", "HornedCommanderBombMob", HornedCommanderBombMob);
-            SnowWolfKingMob = Reader.ReadString("Game", "SnowWolfKingMob", SnowWolfKingMob);
-            ScrollMob1 = Reader.ReadString("Game", "ScrollMob1", ScrollMob1);
-            ScrollMob2 = Reader.ReadString("Game", "ScrollMob2", ScrollMob2);
-            ScrollMob3 = Reader.ReadString("Game", "ScrollMob3", ScrollMob3);
-            ScrollMob4 = Reader.ReadString("Game", "ScrollMob4", ScrollMob4);
-            WhiteSnake = Reader.ReadString("Game", "WhiteSnake", WhiteSnake);
-            AngelName = Reader.ReadString("Game", "AngelName", AngelName);
-            BombSpiderName = Reader.ReadString("Game", "BombSpiderName", BombSpiderName);
-            CloneName = Reader.ReadString("Game", "CloneName", CloneName);
-            FishingMonster = Reader.ReadString("Game", "FishMonster", FishingMonster);
-            AssassinCloneName = Reader.ReadString("Game", "AssassinCloneName", AssassinCloneName);
-            VampireName = Reader.ReadString("Game", "VampireName", VampireName);
-            ToadName = Reader.ReadString("Game", "ToadName", ToadName);
-            SnakeTotemName = Reader.ReadString("Game", "SnakeTotemName", SnakeTotemName);
-            SnakesName = Reader.ReadString("Game", "SnakesName", SnakesName);
-            AncientBatName = Reader.ReadString("Game", "AncientBatName", AncientBatName);
-            TucsonGeneralEgg = Reader.ReadString("Game", "TucsonGeneralEgg", TucsonGeneralEgg);
-            GroupInviteDelay = Reader.ReadInt64("Game", "GroupInviteDelay", GroupInviteDelay);
-            TradeDelay = Reader.ReadInt64("Game", "TradeDelay", TradeDelay);
-            TeleportToNPCCost = Reader.ReadInt32("Game", "TeleportToNPCCost", TeleportToNPCCost);
-            HeroName = Reader.ReadString("Game", "HeroName", HeroName);
+            SnowWolfKingMob        = Reader.ReadString("Game", "SnowWolfKingMob", SnowWolfKingMob);
+            ScrollMob1             = Reader.ReadString("Game", "ScrollMob1", ScrollMob1);
+            ScrollMob2             = Reader.ReadString("Game", "ScrollMob2", ScrollMob2);
+            ScrollMob3             = Reader.ReadString("Game", "ScrollMob3", ScrollMob3);
+            ScrollMob4             = Reader.ReadString("Game", "ScrollMob4", ScrollMob4);
+            WhiteSnake             = Reader.ReadString("Game", "WhiteSnake", WhiteSnake);
+            AngelName              = Reader.ReadString("Game", "AngelName", AngelName);
+            BombSpiderName         = Reader.ReadString("Game", "BombSpiderName", BombSpiderName);
+            CloneName              = Reader.ReadString("Game", "CloneName", CloneName);
+            FishingMonster         = Reader.ReadString("Game", "FishMonster", FishingMonster);
+            AssassinCloneName      = Reader.ReadString("Game", "AssassinCloneName", AssassinCloneName);
+            VampireName            = Reader.ReadString("Game", "VampireName", VampireName);
+            ToadName               = Reader.ReadString("Game", "ToadName", ToadName);
+            SnakeTotemName         = Reader.ReadString("Game", "SnakeTotemName", SnakeTotemName);
+            SnakesName             = Reader.ReadString("Game", "SnakesName", SnakesName);
+            AncientBatName         = Reader.ReadString("Game", "AncientBatName", AncientBatName);
+            TucsonGeneralEgg       = Reader.ReadString("Game", "TucsonGeneralEgg", TucsonGeneralEgg);
+            GroupInviteDelay       = Reader.ReadInt64("Game", "GroupInviteDelay", GroupInviteDelay);
+            TradeDelay             = Reader.ReadInt64("Game", "TradeDelay", TradeDelay);
+            TeleportToNPCCost      = Reader.ReadInt32("Game", "TeleportToNPCCost", TeleportToNPCCost);
+            HeroName               = Reader.ReadString("Game", "HeroName", HeroName);
 
             //Rested
             RestedPeriod = Reader.ReadInt32("Rested", "Period", RestedPeriod);
@@ -445,15 +447,15 @@ namespace Server
             DropGold = Reader.ReadBoolean("DropGold", "DropGold", DropGold);
             MaxDropGold = Reader.ReadUInt32("DropGold", "MaxDropGold", MaxDropGold);
 
-            MagicResistWeight = Reader.ReadByte("Items","MagicResistWeight",MagicResistWeight);
-            PoisonResistWeight = Reader.ReadByte("Items","PoisonResistWeight",PoisonResistWeight);
-            CriticalRateWeight = Reader.ReadByte("Items","CriticalRateWeight",CriticalRateWeight);
-            CriticalDamageWeight = Math.Max((byte)1, Reader.ReadByte("Items","CriticalDamageWeight",CriticalDamageWeight));
-            FreezingAttackWeight = Reader.ReadByte("Items","FreezingAttackWeight",FreezingAttackWeight);
-            PoisonAttackWeight = Reader.ReadByte("Items","PoisonAttackWeight",PoisonAttackWeight);
+            MagicResistWeight = Reader.ReadByte("Items","MagicResistWeight",MagicResistWeight); // 防魔法攻击的系数
+            PoisonResistWeight = Reader.ReadByte("Items","PoisonResistWeight",PoisonResistWeight); // 防毒的系数
+            CriticalRateWeight = Reader.ReadByte("Items","CriticalRateWeight",CriticalRateWeight); // 防暴击的系数
+            CriticalDamageWeight = Math.Max((byte)1, Reader.ReadByte("Items","CriticalDamageWeight",CriticalDamageWeight)); // 暴击伤害的系数
+            FreezingAttackWeight = Reader.ReadByte("Items","FreezingAttackWeight",FreezingAttackWeight); // 冰冻攻击的系数
+            PoisonAttackWeight = Reader.ReadByte("Items","PoisonAttackWeight",PoisonAttackWeight); // 施毒攻击系数
             HealthRegenWeight = Math.Max((byte)1, Reader.ReadByte("Items", "HealthRegenWeight", HealthRegenWeight));
             ManaRegenWeight = Math.Max((byte)1, Reader.ReadByte("Items", "ManaRegenWeight", ManaRegenWeight));
-            MaxLuck = Reader.ReadByte("Items", "MaxLuck", MaxLuck);
+            MaxLuck = Reader.ReadByte("Items", "MaxLuck", MaxLuck); // 最大幸运值，与施展出的攻击力相关
             ItemSealDelay = Reader.ReadUInt16("Items", "SealDelay", ItemSealDelay);
 
             PvpCanResistMagic = Reader.ReadBoolean("Items","PvpCanResistMagic",PvpCanResistMagic);
@@ -519,9 +521,9 @@ namespace Server
             }
 
             LoadVersion();
-            LoadEXP();
-            LoadBaseStats();
-            LoadRandomItemStats();
+            LoadEXP(); // 升级经验配置
+            LoadBaseStats(); // 基础属性配置
+            LoadRandomItemStats(); // 小极品配置
             LoadMines();
             LoadGuildSettings();
 			LoadAwakeAttribute();
@@ -1356,7 +1358,7 @@ namespace Server
             FishingSuccessMultiplier = reader.ReadInt32("Rates", "SuccessMultiplier", FishingSuccessMultiplier);
             FishingDelay = reader.ReadInt64("Rates", "Delay", FishingDelay);
             FishingMobSpawnChance = reader.ReadInt32("Rates", "MonsterSpawnChance", FishingMobSpawnChance);
-            FishingMonster = reader.ReadString("Game", "Monster", FishingMonster);
+            FishingMonster = reader.ReadString("Game", "FishMonster", FishingMonster);
         }
         public static void SaveFishing()
         {
