@@ -66,3 +66,6 @@ obj
 /Components/CustoMFormControl.pdb
 Components/CustomFormControl.dll
 Components/CustomFormControl.pdb
+
+# Rider
+.idea/
