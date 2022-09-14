@@ -767,12 +767,15 @@ namespace Server.MirObjects
                 Hero.GainExp((uint)expPoint);
             }
         }
+        /// <summary>玩家获得经验</summary>
+        /// <param name="amount">经验数量</param>
         public override void GainExp(uint amount)
         {
             if (!CanGainExp) return;
 
             if (amount == 0) return;
 
+            // 有结婚buf时，如果爱人在一定范围时，有一定加成
             if (Info.Married != 0)
             {
                 if (HasBuff(BuffType.Lover, out Buff buff))
@@ -786,6 +789,7 @@ namespace Server.MirObjects
                 }
             }
 
+            // 有徒弟buf时，师傅在一定范围内时，经验有加成
             if (Info.Mentor != 0 && !Info.IsMentor)
             {
                 if (HasBuff(BuffType.Mentee, out _))
@@ -799,6 +803,7 @@ namespace Server.MirObjects
                 }
             }
 
+            // 经验加成buf
             if (Stats[Stat.ExpRatePercent] > 0)
             {
                 amount += (uint)Math.Max(0, (amount * Stats[Stat.ExpRatePercent]) / 100);
@@ -809,11 +814,13 @@ namespace Server.MirObjects
                 MenteeEXP += (amount * Settings.MenteeExpBank) / 100;
             }    
 
+            // 经验增加
             Experience += amount;
 
             Enqueue(new S.GainExperience { Amount = amount });
 
 
+            // 宝宝获得经验
             for (int i = 0; i < Pets.Count; i++)
             {
                 MonsterObject monster = Pets[i];
@@ -821,11 +828,12 @@ namespace Server.MirObjects
                     monster.PetExp(amount);
             }
 
+            // 行会获得经验
             if (MyGuild != null)
                 MyGuild.GainExp(amount);
 
             if (Experience < MaxExperience) return;
-            if (Level >= ushort.MaxValue) return;
+            if (Level >= 50) return; // 满级50
 
             //Calculate increased levels
             var experience = Experience;
@@ -851,6 +859,7 @@ namespace Server.MirObjects
                 Envir.CheckRankUpdate(Info);
             }
         }
+        /// <summary>角色升级</summary>
         public override void LevelUp()
         {
             CallDefaultNPC(DefaultNPCType.LevelUp);
@@ -859,6 +868,7 @@ namespace Server.MirObjects
 
             Enqueue(new S.LevelChanged { Level = Level, Experience = Experience, MaxExperience = MaxExperience });
 
+            // 徒弟升级时，可能由于等级相近解除师徒关系
             if (Info.Mentor != 0 && !Info.IsMentor)
             {
                 CharacterInfo Mentor = Envir.GetCharacterInfo(Info.Mentor);
@@ -993,6 +1003,7 @@ namespace Server.MirObjects
             BindLocation = szi.Location;
             BindMapIndex = CurrentMapIndex;
         }
+        /// <summary>角色进入游戏</summary>
         public void StartGame()
         {
             Map temp = Envir.GetMap(CurrentMapIndex);
@@ -1040,6 +1051,7 @@ namespace Server.MirObjects
                 CallDefaultNPC(DefaultNPCType.Daily);
             }
         }
+        /// <summary>进入游戏</summary>
         private void StartGameSuccess()
         {
             Connection.Stage = GameStage.Game;
@@ -2026,7 +2038,7 @@ namespace Server.MirObjects
 
                         break;
 
-                    case "LEVEL":
+                    case "LEVEL": // 角色升级，@LEVEL <PlayerName> <Level>
                         if ((!IsGM && !Settings.TestServer) || parts.Length < 2) return;
 
                         ushort level;
@@ -2184,7 +2196,7 @@ namespace Server.MirObjects
                         player.RefreshStats();
                         break;
 
-                    case "SUPERMAN":
+                    case "SUPERMAN": // 开启or关闭无敌模式，@SUPERMAN
                         if (!IsGM && !Settings.TestServer) return;
 
                         GMNeverDie = !GMNeverDie;
@@ -2432,7 +2444,7 @@ namespace Server.MirObjects
                         }
                         break;
 
-                    case "MAP":
+                    case "MAP": // @map, 查看当前地图信息
                         var mapName = CurrentMap.Info.FileName;
                         var mapTitle = CurrentMap.Info.Title;
                         ReceiveChat((string.Format("You are currently in {0}. Map ID: {1}", mapTitle, mapName)), ChatType.System);
@@ -2593,7 +2605,7 @@ namespace Server.MirObjects
                         }
                         break;
 
-                    case "MOVE":
+                    case "MOVE":// @move [<x>, <y>], 当前地图瞬移
                         if (!IsGM && !SpecialMode.HasFlag(SpecialItemMode.Teleport) && !Settings.TestServer) return;
                         if (!IsGM && CurrentMap.Info.NoPosition)
                         {
@@ -2620,7 +2632,7 @@ namespace Server.MirObjects
                         Teleport(CurrentMap, new Point(x, y));
                         break;
 
-                    case "MAPMOVE":
+                    case "MAPMOVE": // @mapmove d10062, 瞬移到指定地图
                         if ((!IsGM && !Settings.TestServer) || parts.Length < 2) return;
                         var instanceID = 1; x = 0; y = 0;
 
@@ -2663,7 +2675,7 @@ namespace Server.MirObjects
                         }
                         break;
 
-                    case "GOTO":
+                    case "GOTO": // @goto <PlayerName>
                         if (!IsGM) return;
 
                         if (parts.Length < 2) return;
@@ -2674,7 +2686,7 @@ namespace Server.MirObjects
                         Teleport(player.CurrentMap, player.CurrentLocation);
                         break;
 
-                    case "MOB":
+                    case "MOB": // @mob <Monster Name> [Count]
                         if (!IsGM && !Settings.TestServer) return;
                         if (parts.Length < 2)
                         {
@@ -2744,7 +2756,7 @@ namespace Server.MirObjects
                         ReceiveChat("Drops Reloaded.", ChatType.Hint);
                         break;
 
-                    case "RELOADNPCS":
+                    case "RELOADNPCS": // @reloadNPCs
                         if (!IsGM) return;
 
                         Envir.ReloadNPCs();
@@ -2752,7 +2764,7 @@ namespace Server.MirObjects
                         ReceiveChat("NPC Scripts Reloaded.", ChatType.Hint);
                         break;
 
-                    case "GIVEGOLD":
+                    case "GIVEGOLD": // @GIVEGOLD 999999
                         if ((!IsGM && !Settings.TestServer) || parts.Length < 2) return;
 
                         player = this;
@@ -2780,7 +2792,7 @@ namespace Server.MirObjects
                         MessageQueue.Enqueue(string.Format("Player {0} has been given {1} gold", player.Name, count));
                         break;
 
-                    case "GIVEPEARLS":
+                    case "GIVEPEARLS": // @GIVEPEARLS 999999
                         if ((!IsGM && !Settings.TestServer) || parts.Length < 2) return;
 
                         player = this;
@@ -2810,7 +2822,7 @@ namespace Server.MirObjects
                         else
                             MessageQueue.Enqueue(string.Format("Player {0} has been given {1} pearl", player.Name, count));
                         break;
-                    case "GIVECREDIT":
+                    case "GIVECREDIT": // @GIVECREDIT 999999
                         if ((!IsGM && !Settings.TestServer) || parts.Length < 2) return;
 
                         player = this;
@@ -2837,7 +2849,7 @@ namespace Server.MirObjects
                         player.GainCredit(count);
                         MessageQueue.Enqueue(string.Format("Player {0} has been given {1} credit", player.Name, count));
                         break;
-                    case "GIVESKILL":
+                    case "GIVESKILL": // @giveskill 61 3, 需要学习技能的相应等级
                         if ((!IsGM && !Settings.TestServer) || parts.Length < 3) return;
 
                         byte spellLevel = 0;
@@ -3115,7 +3127,7 @@ namespace Server.MirObjects
                         LastHitter = null;
                         Die();
                         break;
-                    case "HAIR":
+                    case "HAIR": // @hair 3, 换发型
                         if (!IsGM && !Settings.TestServer) return;
 
                         if (parts.Length < 2)
@@ -3132,7 +3144,7 @@ namespace Server.MirObjects
                         }
                         break;
 
-                    case "DECO":
+                    case "DECO": // @deco 3, 地面上生成一个怪物图片作为装饰
                         if ((!IsGM && !Settings.TestServer) || parts.Length < 2) return;
 
                         int.TryParse(parts[1], out tempInt);
@@ -3297,7 +3309,7 @@ namespace Server.MirObjects
 
                         break;
 
-                    case "ADDINVENTORY":
+                    case "ADDINVENTORY": // @inventory, 开通背包物品栏
                         {
                             int openLevel = (int)((Info.Inventory.Length - 46) / 4);
                             uint openGold = (uint)(1000000 + openLevel * 1000000);
@@ -3399,9 +3411,11 @@ namespace Server.MirObjects
                                 case ObjectType.Monster:
                                     MonsterObject monOb = (MonsterObject)ob;
                                     ReceiveChat("--Monster Info--", ChatType.System2);
-                                    ReceiveChat(string.Format("ID : {0}, Name : {1}", monOb.Info.Index, monOb.Name), ChatType.System2);
-                                    ReceiveChat(string.Format("Level : {0}, X : {1}, Y : {2}, Dir: {3}", monOb.Level, monOb.CurrentLocation.X, monOb.CurrentLocation.Y, monOb.Direction), ChatType.System2);
-                                    ReceiveChat(string.Format("HP : {0}, MinDC : {1}, MaxDC : {2}", monOb.Info.Stats[Stat.HP], monOb.Stats[Stat.MinDC], monOb.Stats[Stat.MaxDC]), ChatType.System2);
+                                    ReceiveChat(string.Format("ID: {0}, Name: {1}", monOb.Info.Index, monOb.Name), ChatType.System2);
+                                    ReceiveChat(string.Format("Level: {0}, X: {1}, Y: {2}, Dir: {3}", monOb.Level, monOb.CurrentLocation.X, monOb.CurrentLocation.Y, monOb.Direction), ChatType.System2);
+                                    ReceiveChat(string.Format("HP: {0}, MinDC: {1}, MaxDC: {2}, MinMC: {3}, MaxMC: {4}, Agility:{5}, AttackSpeed:{6}", monOb.Info.Stats[Stat.HP], monOb.Stats[Stat.MinDC], monOb.Stats[Stat.MaxDC], monOb.Stats[Stat.MinMC], monOb.Stats[Stat.MaxMC], monOb.Stats[Stat.Agility], monOb.AttackSpeed), ChatType.System2);
+                                    ReceiveChat(string.Format("MinAC: {0}, MaxAC: {1}, MinMAC: {2}, MaxMAC: {3}, MoveSpeed: {4}", 
+                                        monOb.Info.Stats[Stat.MinAC], monOb.Stats[Stat.MaxAC], monOb.Stats[Stat.MinMAC], monOb.Stats[Stat.MaxMAC], monOb.MoveSpeed), ChatType.System2);
                                     break;
                                 case ObjectType.Merchant:
                                     NPCObject npcOb = (NPCObject)ob;
@@ -7419,6 +7433,9 @@ namespace Server.MirObjects
 
             Enqueue(p);
         }
+        /// <summary>修理装备</summary>
+        /// <param name="uniqueID">装备ID</param>
+        /// <param name="special">是否特殊修理</param>
         public void RepairItem(ulong uniqueID, bool special = false)
         {
             Enqueue(new S.RepairItem { UniqueID = uniqueID });
@@ -7431,6 +7448,8 @@ namespace Server.MirObjects
             {
                 NPCObject ob = CurrentMap.NPCs[n];
                 if (ob.ObjectID != NPCObjectID) continue;
+
+                // 玩家与NPC的距离不能超过一定范围
                 if (!Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange)) return;
 
                 UserItem temp = null;
@@ -7446,7 +7465,10 @@ namespace Server.MirObjects
 
                 if (temp == null || index == -1) return;
 
-                if ((temp.Info.Bind.HasFlag(BindMode.DontRepair)) || (temp.Info.Bind.HasFlag(BindMode.NoSRepair) && special))
+                if (
+                    (temp.Info.Bind.HasFlag(BindMode.DontRepair)) // 物品不需要修理
+                    || (temp.Info.Bind.HasFlag(BindMode.NoSRepair) && special) // 物品不允许特殊修理但是选择的是特殊修理
+                    )
                 {
                     ReceiveChat("You cannot Repair this item.", ChatType.System);
                     return;
@@ -7454,11 +7476,12 @@ namespace Server.MirObjects
 
                 NPCScript script = NPCScript.Get(NPCScriptID);
 
-                if (script.Types.Count != 0 && !script.Types.Contains(temp.Info.Type))
-                {
-                    ReceiveChat("You cannot Repair this item here.", ChatType.System);
-                    return;
-                }
+                //// NPC不支持修理该物品类型。太麻烦了，不做这种限制
+                //if (script.Types.Count != 0 && !script.Types.Contains(temp.Info.Type))
+                //{
+                //    ReceiveChat("You cannot Repair this item here.", ChatType.System);
+                //    return;
+                //}
 
                 uint cost;
                 uint baseCost;
