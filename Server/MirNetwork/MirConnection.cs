@@ -12,7 +12,14 @@ using System.Text.RegularExpressions;
 
 namespace Server.MirNetwork
 {
-    public enum GameStage { None, Login, Select, Game, Observer, Disconnected }
+    public enum GameStage { 
+        None, 
+        Login,       // 登录阶段
+        Select,      // 选人阶段
+        Game,        // 游戏阶段
+        Observer,    // 观战阶段（啥玩意）
+        Disconnected // 失去连接
+    }
 
     public class MirConnection
     {
@@ -102,13 +109,13 @@ namespace Server.MirNetwork
             TimeOutTime = TimeConnected + Settings.TimeOut;
 
 
-            _receiveList = new ConcurrentQueue<Packet>();
-            _sendList = new ConcurrentQueue<Packet>();
-            _sendList.Enqueue(new S.Connected());
-            _retryList = new Queue<Packet>();
+            _receiveList = new ConcurrentQueue<Packet>();   // 初始化接收队列，用于存放接收到的封包
+            _sendList    = new ConcurrentQueue<Packet>();   // 初始化发送队列，用于存放要发送的封包
+            _sendList.Enqueue(new S.Connected());           // 发送队列入队一个已连接的封包
+            _retryList   = new Queue<Packet>();             // 初始化重试队列
 
             Connected = true;
-            BeginReceive();
+            BeginReceive(); // 开始接收和处理客户端封包
         }
 
         public void AddObserver(MirConnection c)
@@ -128,13 +135,15 @@ namespace Server.MirNetwork
 
             try
             {
-                _client.Client.BeginReceive(_rawBytes, 0, _rawBytes.Length, SocketFlags.None, ReceiveData, _rawBytes);
+                // 开始从已建立连接的Socket中异步接收数据，处理完成后，调用异步回调ReceiveData
+                _client.Client.BeginReceive(_rawBytes, 0, _rawBytes.Length, SocketFlags.None, ReceiveData, _rawBytes); 
             }
             catch
             {
                 Disconnecting = true;
             }
         }
+        // 接收到的数据
         private void ReceiveData(IAsyncResult result)
         {
             if (!Connected) return;
@@ -157,18 +166,18 @@ namespace Server.MirNetwork
                 return;
             }
 
-            byte[] rawBytes = result.AsyncState as byte[];
+            byte[] rawBytes = result.AsyncState as byte[]; // rawBytes是本次从Socket接收到的数据buffer
 
-            byte[] temp = _rawData;
+            byte[] temp = _rawData; // _rawData不为空的话，就是上次从Socket接收数据后，解析Packet后剩下的字节序列（最后一个Packet被截断）
             _rawData = new byte[dataRead + temp.Length];
             Buffer.BlockCopy(temp, 0, _rawData, 0, temp.Length);
-            Buffer.BlockCopy(rawBytes, 0, _rawData, temp.Length, dataRead);
+            Buffer.BlockCopy(rawBytes, 0, _rawData, temp.Length, dataRead); // 拼接上次ReceiveData时被截断的Packet前半部分和本次ReceiveData接收的数据
 
             Packet p;
             while ((p = Packet.ReceivePacket(_rawData, out _rawData)) != null)
-                _receiveList.Enqueue(p);
+                _receiveList.Enqueue(p); // 接收到的Packet放入队列
 
-            BeginReceive();
+            BeginReceive(); // 再次开始接收数据
         }
         private void BeginSend(List<byte> data)
         {
