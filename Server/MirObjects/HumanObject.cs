@@ -188,7 +188,14 @@ namespace Server.MirObjects
 
         public LevelEffects LevelEffects = LevelEffects.None;
 
-        public const long LoyaltyDelay = 1000, ItemExpireDelay = 60000, DuraDelay = 10000, RegenDelay = 10000, PotDelay = 200, HealDelay = 600, VampDelay = 500, MoveDelay = 600;
+        public const long   LoyaltyDelay    = 1000, 
+                            ItemExpireDelay = 60000, 
+                            DuraDelay       = 10000, 
+                            RegenDelay      = 10000, 
+                            PotDelay        = 200, 
+                            HealDelay       = 600, 
+                            VampDelay       = 500, 
+                            MoveDelay       = 600; // Walk, Run的操作CD
         public long StruckTime, RunTime, ActionTime, AttackTime, RegenTime, SpellTime, StackingTime, IncreaseLoyaltyTime, ItemExpireTime, TorchTime, DuraTime, PotTime, HealTime, VampTime, LogTime, DecreaseLoyaltyTime, SearchTime;
 
         protected int _stepCounter, _runCounter;
@@ -2347,6 +2354,9 @@ namespace Server.MirObjects
         {
             return false;
         }
+        /// <summary>执行玩家走的操作</summary>
+        /// <param name="dir">方向</param>
+        /// <returns>true if success<br /></returns>
         public bool Walk(MirDirection dir)
         {
             if (!CanMove || !CanWalk)
@@ -3864,18 +3874,21 @@ namespace Server.MirObjects
 
             if (result) LevelMagic(magic);
         }
-        private void ElectricShock(MonsterObject target, UserMagic magic)
+
+        private void ElectricShock(MonsterObject target, UserMagic magic) // 法师技能，诱惑之光
         {
             if (target == null || !target.IsAttackTarget(this)) return;
 
-            if (Envir.Random.Next(4 - magic.Level) > 0)
-            {
-                if (Envir.Random.Next(2) == 0) LevelMagic(magic);
-                return;
-            }
-
+            //// 施法成功率与技能等级相关，施法有概率获得额外技能经验
+            //if (Envir.Random.Next(4 - magic.Level) > 0)
+            //{
+            //    if (Envir.Random.Next(2) == 0) LevelMagic(magic);
+            //    return;
+            //}
+            // 获取技能经验
             LevelMagic(magic);
 
+            // 诱惑目标的主人是玩家本人，则目标呆住（名字变黄）
             if (target.Master == this)
             {
                 target.ShockTime = Envir.Time + (magic.Level * 5 + 10) * 1000;
@@ -3883,6 +3896,7 @@ namespace Server.MirObjects
                 return;
             }
 
+            // 诱惑目标有概率呆住（名字变黄）
             if (Envir.Random.Next(2) > 0)
             {
                 target.ShockTime = Envir.Time + (magic.Level * 5 + 10) * 1000;
@@ -3890,30 +3904,41 @@ namespace Server.MirObjects
                 return;
             }
 
-            if (target.Level > Level + 2 || !target.Info.CanTame) return;
+            // 诱惑目标的等级不能比玩家等级高2级（不包括2级）
+            // 诱惑目标的能否被诱惑
+            //if (target.Level > Level + 2 || !target.Info.CanTame) return;
 
-            if (Envir.Random.Next(Level + 20 + magic.Level * 5) <= target.Level + 10)
+            // 施法成功率与玩家等级、技能等级、目标等级相关，玩家等级、技能等级越高，目标等级越低，则施法成功率越高
+            //if (Envir.Random.Next(Level + 20 + magic.Level * 5) <= target.Level + 10)
+            //{
+            //    if (Envir.Random.Next(5) > 0 && target.Master == null)
+            //    {
+            //        target.RageTime = Envir.Time + (Envir.Random.Next(20) + 10) * 1000;
+            //        target.Target = null;
+            //    }
+            //    return;
+            //}
+
+            if (Envir.Random.Next(2) > 0 && target.Master == null)
             {
-                if (Envir.Random.Next(5) > 0 && target.Master == null)
-                {
-                    target.RageTime = Envir.Time + (Envir.Random.Next(20) + 10) * 1000;
-                    target.Target = null;
-                }
+                target.RageTime = Envir.Time + (Envir.Random.Next(20) + 10) * 1000; // 怪物进入狂暴
+                target.Target = null;
                 return;
             }
 
             var petBonus = Globals.MaxPets - 3;
 
+            // 宝宝的数量不能大于(技能等级+petBonus)，即最多5个
             if (Pets.Count(t => !t.Dead && t.Race != ObjectType.Creature) >= magic.Level + petBonus) return;
 
-            int rate = (int)(target.Stats[Stat.HP] / 100);
-            if (rate <= 2) rate = 2;
-            else rate *= 2;
-
-            if (Envir.Random.Next(rate) != 0) return;
+            //int rate = (int)(target.Stats[Stat.HP] / 100);
+            //if (rate <= 2) rate = 2;
+            //else rate *= 2;
+            // if (Envir.Random.Next(rate) != 0) return; // 施法成功率与诱惑对象的血量相关，弓箭守卫, 血量为9999，rate = 198，施法成功率为 1/198
             //else if (Envir.Random.Next(20) == 0) target.Die();
 
-            if (target.Master != null)
+            // 到此，已认为本次施法成功诱惑了目标
+            if (target.Master != null) // 诱惑目标已经有主人
             {
                 target.SetHP(target.Stats[Stat.HP] / 10);
                 target.Master.Pets.Remove(target);
@@ -3934,11 +3959,11 @@ namespace Server.MirObjects
             target.RageTime = 0;
             target.ShockTime = 0;
             target.OperateTime = 0;
-            target.MaxPetLevel = (byte)(1 + magic.Level * 2);
+            target.MaxPetLevel = (byte)(1 + magic.Level * 2); // 宝宝的最大等级 = 1 + <技能等级>*2, 即7级
 
             if (!Settings.PetSave)
             {
-                target.TameTime = Envir.Time + (Settings.Minute * 60);
+                target.TameTime = Envir.Time + (Settings.Minute * 60); // 60分钟后宝宝会叛变
             }
 
             target.Broadcast(new S.ObjectName { ObjectID = target.ObjectID, Name = target.Name });
