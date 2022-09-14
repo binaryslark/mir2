@@ -64,7 +64,7 @@ namespace Client.MirScenes
         }
         public HeroSpawnState HeroSpawnState;
 
-        public MapControl MapControl;
+        public MapControl MapControl; // 小地图控件
         public MainDialog MainDialog;
         public ChatDialog ChatDialog;
         public ChatControlBar ChatControl;
@@ -10844,32 +10844,33 @@ namespace Client.MirScenes
 
             switch (setting)
             {
-                case LightSetting.Night:
-                    {
-                        switch (MapDarkLight)
-                        {
-                            case 1:
-                                darkness = Color.FromArgb(255, 20, 20, 20);
-                                break;
-                            case 2:
-                                darkness = Color.LightSlateGray;
-                                break;
-                            case 3:
-                                darkness = Color.SkyBlue;
-                                break;
-                            case 4:
-                                darkness = Color.Goldenrod;
-                                break;
-                            default:
-                                darkness = Color.Black;
-                                break;
-                        }
-                    }
-                    break;
-                case LightSetting.Evening:
-                case LightSetting.Dawn:
-                    darkness = Color.FromArgb(255, 50, 50, 50);
-                    break;
+                /* 一直白天，不要显示夜晚，看瞎眼 */
+                //case LightSetting.Night:
+                //    {
+                //        switch (MapDarkLight)
+                //        {
+                //            case 1:
+                //                darkness = Color.FromArgb(255, 20, 20, 20);
+                //                break;
+                //            case 2:
+                //                darkness = Color.LightSlateGray;
+                //                break;
+                //            case 3:
+                //                darkness = Color.SkyBlue;
+                //                break;
+                //            case 4:
+                //                darkness = Color.Goldenrod;
+                //                break;
+                //            default:
+                //                darkness = Color.Black;
+                //                break;
+                //        }
+                //    }
+                //    break;
+                //case LightSetting.Evening:
+                //case LightSetting.Dawn:
+                //    darkness = Color.FromArgb(255, 50, 50, 50);
+                //    break;
                 default:
                 case LightSetting.Day:
                     darkness = Color.FromArgb(255, 255, 255, 255);
