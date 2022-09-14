@@ -476,8 +476,8 @@ namespace Server.MirObjects
             get { return ObjectType.Monster; }
         }
 
-        public MonsterInfo Info;
-        public MapRespawn Respawn;
+        public MonsterInfo Info; // 怪物信息
+        public MapRespawn Respawn; // 怪物复活信息
 
         public override string Name
         {
@@ -543,6 +543,8 @@ namespace Server.MirObjects
         {
             get { return Info.Experience; }
         }
+        /// <summary>死亡CD（死亡还有CD？）</summary>
+        /// <value>The dead delay.</value>
         public int DeadDelay
         {
             get
@@ -561,17 +563,23 @@ namespace Server.MirObjects
                 }
             }
         }
-        public const int RegenDelay = 10000, EXPOwnerDelay = 5000, AloneDelay = 3000, SearchDelay = 3000, RoamDelay = 1000, HealDelay = 600, RevivalDelay = 2000;
+        public const int RegenDelay = 10000; // 怪物的刷新CD
+        public const int EXPOwnerDelay = 5000; // 怪物经验获得者更换的CD
+        public const int AloneDelay = 3000; // ?
+        public const int SearchDelay = 3000; // 
+        public const int RoamDelay = 1000; // 怪物漫游的CD
+        public const int HealDelay = 600; // 怪物的治疗CD
+        public const int RevivalDelay = 2000; // 怪物的复活CD（僵尸？）
         public long ActionTime, MoveTime, AttackTime, RegenTime, DeadTime, AloneTime, SearchTime, RoamTime, HealTime;
         public long ShockTime, RageTime, HallucinationTime;
         public bool BindingShotCenter, PoisonStopRegen = true;
 
         protected bool Alone = false, Stacking = false;
 
-        public byte PetLevel;
-        public uint PetExperience;
-        public byte MaxPetLevel;
-        public long TameTime;
+        public byte PetLevel; // 怪物作为宝宝时的等级
+        public uint PetExperience; // 怪物作为宝宝时的经验
+        public byte MaxPetLevel; // 怪物作为宝宝时的最大升级等级
+        public long TameTime; // 被驯服的时间（用以计算叛变时间）
         public bool DieNextTurn;
 
         public int RoutePoint;
@@ -587,6 +595,7 @@ namespace Server.MirObjects
                 return !Dead;
             }
         }
+        /// <summary>怪物是否已经到了刷新时间</summary>
         protected virtual bool CanRegen
         {
             get { return Envir.Time >= RegenTime; }
@@ -696,22 +705,36 @@ namespace Server.MirObjects
             AttackSpeed = Info.AttackSpeed;
         }
 
+        /// <summary>宝宝升级，刷新它的属性</summary>
         public virtual void RefreshAll()
         {
             RefreshBase();
 
-            Stats[Stat.HP] += PetLevel * 20;
-            Stats[Stat.MinAC] += PetLevel * 2;
-            Stats[Stat.MaxAC] += PetLevel * 2;
-            Stats[Stat.MinMAC] += PetLevel * 2;
-            Stats[Stat.MaxMAC] += PetLevel * 2;
-            Stats[Stat.MinDC] += PetLevel;
-            Stats[Stat.MaxDC] += PetLevel;
+            Stats[Stat.HP]     += PetLevel * 20; // HP成长
+            Stats[Stat.MinAC]  += PetLevel * 2;  // 最小防御力成长
+            Stats[Stat.MaxAC]  += PetLevel * 2;  // 最大防御力成长
+            Stats[Stat.MinMAC] += PetLevel * 2;  // 最小魔防成长
+            Stats[Stat.MaxMAC] += PetLevel * 2;  // 最大魔防成长
+            Stats[Stat.MinDC]  += PetLevel;      // 最小攻击力成长
+            Stats[Stat.MaxDC]  += PetLevel;      // 最大攻击力成长
 
-            if (Info.Name == Settings.SkeletonName || Info.Name == Settings.ShinsuName || Info.Name == Settings.AngelName)
+            // 道士的宝宝在移速、攻速上有成长
+            //if (Info.Name == Settings.SkeletonName || Info.Name == Settings.ShinsuName || Info.Name == Settings.AngelName)
             {
-                MoveSpeed = (ushort)Math.Min(ushort.MaxValue, (Math.Max(ushort.MinValue, MoveSpeed - MaxPetLevel * 130)));
-                AttackSpeed = (ushort)Math.Min(ushort.MaxValue, (Math.Max(ushort.MinValue, AttackSpeed - MaxPetLevel * 70)));
+                ushort OldMoveSpeed = MoveSpeed;
+                int OldAttackSpeed = AttackSpeed;
+                //// MoveSpeed表示的是移动CD值(毫秒)，每升一级减少CD
+                //MoveSpeed = (ushort)Math.Min(ushort.MaxValue, (Math.Max(ushort.MinValue, MoveSpeed - MaxPetLevel * 130)));
+                //// AttackSpeed表示的是攻击CD值(毫秒)，每升一级减少CD
+                //AttackSpeed = (ushort)Math.Min(ushort.MaxValue, (Math.Max(ushort.MinValue, AttackSpeed - MaxPetLevel * 70)));
+                MoveSpeed = (ushort)Math.Min(ushort.MaxValue, (Math.Max(ushort.MinValue, MoveSpeed - PetLevel * 130)));
+                AttackSpeed = (ushort)Math.Min(ushort.MaxValue, (Math.Max(ushort.MinValue, AttackSpeed - PetLevel * 140)));
+#if DEBUG
+                if (master != null) 
+                {
+                    master.ReceiveChat(String.Format("MoveSpeed:{0}->{1}, AttackSpeed:{2}->{3}", OldMoveSpeed, MoveSpeed, OldAttackSpeed, AttackSpeed), ChatType.System2);
+                }
+#endif
             }
 
             if (MoveSpeed < 400) MoveSpeed = 400;
@@ -3217,18 +3240,24 @@ namespace Server.MirObjects
             player.Enqueue(new S.ObjectHealth { ObjectID = ObjectID, Percent = PercentHealth, Expire = time });
         }
 
+        /// <summary>宝宝获得经验</summary>
+        /// <param name="amount">经验值</param>
         public void PetExp(uint amount)
         {
+            // 满级后不能再升级
             if (PetLevel >= MaxPetLevel) return;
 
+            // 道士的变异骷髅或神兽经验获得有buf
             if (Info.Name == Settings.SkeletonName || Info.Name == Settings.ShinsuName || Info.Name == Settings.AngelName)
                 amount *= 3;
 
             PetExperience += amount;
 
-            if (PetExperience < (PetLevel + 1) * 20000) return;
+            //int PetLevelUpExpRate = 20000;
+            int PetLevelUpExpRate = 1; // FIXME: 1点经验就升一级，调整成一个合适的宝宝升级经验值
+            if (PetExperience < (PetLevel + 1) * PetLevelUpExpRate) return;
 
-            PetExperience = (uint)(PetExperience - ((PetLevel + 1) * 20000));
+            PetExperience = (uint)(PetExperience - ((PetLevel + 1) * PetLevelUpExpRate));
             PetLevel++;
             RefreshAll();
             OperateTime = 0;
