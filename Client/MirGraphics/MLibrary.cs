@@ -869,6 +869,8 @@ namespace Client.MirGraphics
 
         public unsafe byte* Data;
 
+        public static int ExportIndex = 0;
+
         public MImage(BinaryReader reader)
         {
             //read layer 1
@@ -907,6 +909,9 @@ namespace Client.MirGraphics
 
             stream.Data.Dispose();
             Image.UnlockRectangle(0);
+
+            
+            //Texture.ToFile(Image, String.Format("tmp/{0}.png", ExportIndex++), ImageFileFormat.Png);
 
             if (HasMask)
             {
